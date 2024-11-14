@@ -1,0 +1,105 @@
+
+
+.page-titles {
+	padding: 15px 40px;
+    background: $white;
+    margin-bottom: 30px;
+    border-radius: 0;
+    margin-top: -40px;
+    margin-left: -40px;
+    margin-right: -40px;
+	
+	@include respond ('tab-land'){
+		margin-left:-30px;
+		margin-right:-30px;
+	}
+	
+    @at-root [data-theme-version="dark"] & {
+        background: $dark-card;
+    }
+
+    @include respond('tab-land') {
+		margin-top: -30px;
+	}
+    @include respond('phone-land') {
+		margin-left: -20px;
+		margin-right: -20px;
+		margin-bottom: 15px;
+		padding: 15px 20px;
+		margin-top: -20px;
+    }
+	@include respond ('phone'){
+		margin-right:-15px;
+	}
+
+    .justify-content-sm-end{
+        align-items: center;
+    }
+
+    h4 {
+        margin-bottom: 0;
+        margin-top: 0;
+        color: var(--primary);
+        font-size: 1.25rem;
+        span {
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+    }
+    .breadcrumb {
+        margin-bottom: 0;
+        padding: 0;
+        background: transparent;
+        li {
+            margin-top: 0;
+            margin-bottom: 0;
+
+            a{
+               color: $l-ctl; 
+			   @include respond ('phone'){
+					font-size:12px;
+			   }
+
+            }
+
+            &.active{
+                color:var(--primary);
+				font-weight: 600;
+				a{
+					color:$secondary;
+				}
+            }
+        }
+        
+        .breadcrumb-item + .breadcrumb-item {
+            &:before {
+				color:$secondary;
+            }
+        }
+
+        &-datepicker{
+            font-size: 0.75rem;
+            color: $muted;
+
+            &__icon{
+                font-size: 0.875rem;
+            }
+        }
+    }
+
+    .breadcrumb-widget{
+        .border-dark{
+            border-color: $gray-300!important;
+        }
+        h4{
+            color: $strong;
+            font-weight: 600;
+        }
+        @include respond('phone') {
+            text-align: left!important;
+            margin-bottom: 0.9375rem;
+        }
+    }
+    
+}
+

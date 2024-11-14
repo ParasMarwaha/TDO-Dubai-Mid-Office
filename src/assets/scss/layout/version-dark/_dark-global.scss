@@ -1,0 +1,1014 @@
+[data-theme-version="dark"]{
+	--bs-body-color: #fff;
+    .dropdown-menu {
+        background-color: $dark-card;
+		box-shadow: 0px 0px 0px 1px rgba(255, 255, 255,0.1);
+		
+		.dropdown-item {
+			color:#777777;
+			&.selected,
+			&.selected.active,
+			&.active,
+			&:hover, 
+			&:focus {
+				background-color: $d-bg;
+				color: $white;
+			}
+		}
+    }
+	::placeholder {
+		color:#eee;
+	}
+	
+	.text-primary{
+		color:$white!important;
+	}
+	.btn-link g [fill]{
+		fill: #fff;
+	}
+	.btn-light:active, 
+	.btn-light:focus, 
+	.btn-light:hover{
+		color:#000;
+	}
+    .form-control {
+        background-color:$dark-card;
+        border-color: $d-border;
+        color: $white;
+    }
+    .card {
+        background-color: $dark-card;
+		box-shadow:none;
+    }
+	.btn-outline-dark:hover{
+		background-color: $d-bg;
+		border-color: $d-bg;
+	}
+	.tdl-holder input[type=text],
+	.tdl-holder li{
+	    background-color: $dark-card;
+		border-color:$d-border;
+	}
+	.tdl-holder input[type=text]{
+		&::placeholder {
+			color: $d-ctl;
+		}
+	}
+    .tdl-holder label:hover {
+		background-color: $d-border;
+		color: $white;
+	}
+	.text-muted {
+		color: $d-ctl !important;
+	}
+	.modal-content{
+		background:$dark-card;
+	}
+	.modal-footer,
+	.modal-header{
+		border-color: $d-border;
+	}
+	.close{
+	    font-weight: 400;
+		color: $white;
+		text-shadow: none;
+		
+		&:hover{
+			color: $white;
+		}
+	}
+	.header-left .dashboard_bar,
+	.star-review span,
+	.table strong {
+		color: #fff;
+	}
+	.text-dark {
+		color: $d-ctl ;
+	}
+	.star-rating .product-review,
+	.new-arrival-content .item{
+		color: $white;
+	}
+	.custom-dropdown .dropdown-menu{
+		border-color: $d-border;
+	}
+	.widget-stat .media > span{
+	    background: $d-border;
+	    border-color: $d-border;
+		color:$white;
+	}
+	.plus-minus-input .custom-btn{
+		background: $d-bg;
+	    border-color: $d-border;
+	}
+	.dropdown-divider,
+	.size-filter ul li{
+		border-color: $d-border;
+	}
+	.custom-select{
+	    border-color: $d-border;
+		color: $d-ctl;
+		background:$d-bg;
+	}
+	.nav-tabs{
+		border-color: $d-border;
+	}
+	.mail-list .list-group-item.active i {
+		color: $white;
+	}
+	hr{
+		border-color: $d-border;
+	}
+	.grid-col{
+		background:$d-bg;
+	}
+	.mail-list .list-group-item:hover{
+		color:$white;
+	}
+	.fc .fc-daygrid-week-number{
+		color:$white;
+	}
+	.noUi-target{
+		border-color:$d-border;
+		border-radius: 8px;
+		box-shadow: none;
+		
+		.noUi-connects{
+			background:$d-border;
+		}
+	}
+	.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror{
+		box-shadow:unset;
+	}
+	.form-label{
+		color:$white;
+	}
+	.noUi-marker-large,
+	.noUi-marker{
+		background:$d-border;
+	}
+	.input-group-text{
+		background:$d-bg;
+		color:#fff;
+		border:0;
+		border-color:$d-border;
+	}
+	.note-editor.note-frame{
+		border-color:$d-border;
+		.btn{
+			color:$white;
+		}
+		.note-editing-area .note-editable{
+			color:$white;
+		}
+	}
+	.widget-media .timeline .timeline-panel{
+		border-color:$d-border; 
+	}
+	.notification_dropdown .dropdown-menu-right .all-notification{
+		border-color:$d-border; 
+	}
+	#user-activity .nav-tabs .nav-link{
+		border-color:$d-border; 
+        &.active{
+            background:$d-bg;
+            color:$white;
+        }
+	}
+	.list-group-item-action{
+		color:$white;
+	}
+	.list-group-item-action:focus, 
+	.list-group-item-action:hover, 
+	.list-group-item-action:focus{
+		background-color:$d-bg; 
+		border-color:$d-bg; 
+	}
+	.select2-container--default .select2-selection--single .select2-selection__rendered{
+		color:$white;
+	}
+	
+	.list-group-item.active{
+		color:$white;
+		border-color:var(--primary);
+		&:focus, 
+		&:hover, 
+		&:focus{
+			background-color:var(--primary); 
+			border-color:var(--primary); 
+			color:$white;
+		}
+	}
+	.swal2-popup{
+		background:$dark-card;
+	}	
+	.form-head .btn-outline-primary{
+		border-color:$d-border;
+	}
+	.form-head .btn-outline-primary:hover{
+		border-color:var(--primary);
+	}
+	.review-tab.nav-pills li a.nav-link.active{
+		background:transparent;
+	}
+	.header-right .header-profile > a.nav-link .header-info span,
+	.review-table .media-body p,
+	.iconbox small,
+	.doctor-info-details .media-body p{
+		color:$white;
+	}
+	.iconbox p,
+	.doctor-info-details .media-body span{
+		color:rgba(255,255,255,0.7);
+	}
+	.best-doctor .timeline .timeline-panel{
+		background:$dark-card ;
+	}
+	.doctor-list .accordion__header-line{
+		background:$d-border;
+	}
+	.review-table .disease,
+	.review-table,
+	.review-box{
+		border-color:$d-border;
+	}
+	.form-head .search-area{ 
+		.form-control{
+			border:1px solid $d-border;
+		}
+		.input-group-append .input-group-text{
+			background:$d-border;
+		}
+	}
+	.patient-activity tbody tr{
+	    box-shadow: 0 1px 0 0 $d-border;
+	}
+	.plus-box{
+	    background: rgba(255,255,255,0.05);
+		color: #fff;
+	}
+	.default-select{
+		&.style-1{
+			.btn{
+				color:$white;
+			}
+		}
+	}
+	.new-arrival-content {
+		 h4 {
+			a{
+				color:$white;
+			}
+		 }
+	}
+	.text-black{
+		color:$white!important;
+	}
+	.abilities-chart .ct-chart .ct-label{
+		fill:$white;
+	}
+	.apexcharts-legend-text{
+		color:$white;
+	}
+	.morris_chart_height text tspan{
+		fill:$white;
+	}
+	.toggle-switch.text-right .custom-control-label:before{
+		background-color:#ffffff29;
+	}
+	.toggle-switch .custom-control-input:checked ~ .custom-control-label:before{
+		background-color:$white;
+	}
+	.btn-link{
+		color:$white;
+	}
+	.amount-bx .form-control{
+		background-color:transparent;
+		color:$white;
+		&::placeholder{
+			color:$white;
+		}
+	}
+	.table{
+		&.bg-info-hover{
+			td{
+				color:#757878;
+			}
+		}
+		&.bg-primary-hover{
+			td{
+				color:#757878;
+			}
+		}
+		&.bg-warning-hover{
+			td{
+				color:#757878;
+			}
+		}
+		&.bg-secondary-hover{
+			td{
+				color:#757878;
+			}
+		}
+	}
+	.order-bg{
+		background:$d-bg;
+	}
+	.deznav .metismenu > li.mm-active > a:after{
+		border-color:var(--primary);
+	}
+	.detault-daterange .input-group-text{
+		background:$d-bg;
+		color:$white;
+	}
+	.form-wrapper{
+		.input-group{
+			background:$d-bg;
+			border:0;
+			.input-group-prepend .input-group-text{
+				color:$white;
+			}
+		}
+	}
+	.search-area-2{
+		.form-control{
+			background-color:$dark-card;
+		}
+		.input-group-append{
+			.input-group-text{
+				background-color:$dark-card;
+				border:none;
+			}
+		}
+	}
+	.dataTablesCard{
+		background-color:$dark-card;
+	}
+
+	.compose-content .dropzone{
+		background:$d-bg;
+		.dz-message .dz-button{
+			color:$white;
+		}
+	}
+	.daterangepicker{
+		background:$d-bg;
+		border-color:var(--primary);
+		.calendar-table{
+			border-color:var(--primary);
+			background:$d-bg;
+			.table-condensed{
+				td{
+					&:hover{
+						background-color:var(--primary);
+						color:$white;
+					}
+				}
+			}
+		}
+        &:after{
+            border-bottom: 6px solid $d-bg;
+        }
+	}
+    
+    .daterangepicker select.hourselect
+    , .daterangepicker select.minuteselect
+    , .daterangepicker select.secondselect
+    , .daterangepicker select.ampmselect{
+            background: $d-bg;
+            border: 1px solid $d-border;
+            color:$white;
+    }
+    
+	.daterangepicker td.off, 
+	.daterangepicker td.off.in-range,
+	.daterangepicker td.off.start-date, 
+	.daterangepicker td.off.end-date{
+		background-color:$dark-card;
+		&:hover{
+			background-color:var(--primary);
+			color:$white;			
+		}
+	}
+	
+	.app-fullcalendar{
+		.fc-button{
+			background-color:$d-bg;
+			border-color:var(--primary);
+			color:$white;
+			text-shadow:none;
+			&:hover,&.fc-stat-hover{
+				background-color:var(--primary);
+			}
+		}
+	}
+	.swal2-popup .swal2-styled:focus {
+		outline: 0;
+		box-shadow: 0 0 0 2px $d-border, 0 0 0 4px var(--rgba-primary-1);
+	}
+	.dd-handle{
+		border-color:$d-border;
+	}
+	.menu-toggle .deznav .metismenu li > ul{
+		background:$dark-card!important;
+	}
+	.header-right .notification_dropdown .nav-link{
+		border-color:$d-border;
+	}
+	.nav-tabs .nav-link{
+		&:hover,&.active{
+			border-color:var(--primary);
+		}
+	}
+	.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
+		color:$light;
+	}
+.form-control::-webkit-file-upload-button{
+		background-color:$d-bg!important;	
+		color:$white;
+	}
+	.form-control:hover{
+		&::-webkit-file-upload-button{
+			background-color:$d-bg!important;	
+		}
+	}
+	.clockpicker-popover .popover-content{
+		background-color:$dark-card;
+	}
+	.clockpicker-plate{
+		background-color:$d-bg;
+	}
+	.clockpicker-popover .popover-title{
+		background-color:$d-bg;
+		color:$white;
+	}
+	.form-wizard .nav-wizard li .nav-link span{
+		background-color:$d-bg;
+	}
+	.form-wizard .nav-wizard li .nav-link:after{
+		background:$d-bg;
+	}
+	.form-wizard .nav-wizard li .nav-link.active:after,.form-wizard .nav-wizard li .nav-link.done:after{
+		background:var(--primary);
+	}
+	.form-wizard .nav-wizard li .nav-link.active span
+	,.form-wizard .nav-wizard li .nav-link.done span{
+		background:var(--primary);
+	}
+    
+    .amount-bx{
+        border-top: 1px solid $d-border;
+        border-bottom: 1px solid $d-border;
+    }
+    
+    .bar-chart{
+        line{
+            stroke:$d-border;
+            stroke-dasharray: 6;
+        }
+    }
+    #lineChart{
+        line{
+            stroke:$d-border;
+            stroke-dasharray: 6;
+        }
+    }
+    .activity-icon{
+        border-color: #f0f0f063;
+    }
+    .check-switch .custom-control-label:after
+    , .check-switch .custom-control-label:before{
+        border-color:var(--primary);
+    }
+    .fc-unthemed .fc-today{
+        background:$d-bg;
+    }
+    .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-popover .fc-header{
+        background: $d-border;
+    }
+    .picker__box{
+        background:$d-bg;
+        .picker__button--clear
+        , .picker__button--close
+        , .picker__button--today{
+            background:$dark-card;
+            color:$white;
+            &:hover{
+                &:before{
+                    color:$white;
+                }
+            }
+        }
+    }
+    .picker{
+        color:#999;
+    }
+    .dtp > .dtp-content{
+        background:$d-bg;
+    }
+    .dtp table.dtp-picker-days tr > td > a{
+       color: #68686a; 
+       &.selected{
+           color:$white;
+       }
+    }
+	.order-request tbody tr{
+		border-color:$d-border;
+	}
+	#customerMap,#customerMap2,#customerMap3{
+		line{
+			stroke:$d-border;
+		}
+	}
+	.header-right .header-profile > a.nav-link{
+		border-color:$d-border;
+	}
+	
+	#radialChart{
+		.apexcharts-tracks #apexcharts-radialbarTrack-0{
+			stroke:$d-bg;
+		}
+		 circle{
+			fill:$d-bg;
+		}
+		.apexcharts-datalabels-group text{
+			fill:$white;
+		}
+	}
+	.chatbox .type_msg .form-control{
+		background-color:transparent;
+	}
+	.default-select.style-2 .btn{
+		background:$dark-card;
+		border:1px solid $d-border;
+	}
+	.table-tabs .nav-tabs{
+		background:$dark-card;
+	}
+	#revenueMap,#customerMapkm{
+		line{
+			stroke:$d-border;
+		}
+	}
+	
+	.sidebar-right .tab-content .tab-pane .admin-settings > h4{
+		border-color:$d-border;
+	}
+	.dz-demo-panel .dz-demo-bx{
+		&.demo-active{
+			border-color:$secondary;
+		}
+	}
+	.event-calender .datepicker table tr td.active, .event-calender .datepicker table tr td.today{
+		background: #f9f9f9 ;
+		//color: #000 ;
+	}
+	.event-calender .bootstrap-datetimepicker-widget table td{
+		color: white;
+	}
+	.event-calender .bootstrap-datetimepicker-widget table thead tr .picker-switch{
+		color: white;
+	}
+	.event-calender .bootstrap-datetimepicker-widget table th{
+		color: white;
+	}
+	.btn.sharp{
+		svg{
+			path{
+				stroke:white;
+			}
+		}
+	}
+	.dataTablesCard{
+		tr{
+			th,td{
+				color:#828690;
+			}
+		}
+	}
+	.peity{
+		path{
+			&:last-child{
+				fill:$d-bg;
+			}
+		}
+	}
+	.period-btn{
+		background:$dark-card;
+		.btn{
+			background:$dark-card;
+		}
+	}
+	.progress.style-1 .counter-bx{
+		color:black!important;
+	}
+	.default-select{
+		.list{
+			background:$dark-card;
+		}
+		.option{
+			&:hover,&.selected,&.focus{
+				background-color:$d-bg;
+			}
+		}
+	}
+	.language-btn{
+		.btn{
+			color:$white!important;
+			&:hover,
+			&:active{
+				color:$white!important;
+			}
+		}
+	}
+	.search-area{
+		.input-group-text{
+			background:none;
+		}
+		.form-control{
+			&:focus{
+				border-color:$d-border;
+			}
+		}
+	}
+	.search-area2{
+		.input-group-text{
+			background:$dark-card;
+		}
+	}
+	.donutChart2{
+		.apexcharts-pie-series path{
+			stroke:$dark-card;
+		}
+	}
+	.event-list .date-bx:after{
+		border-color:$dark-card;
+	}
+	// .form-check-input{
+	// 	border-color:$d-border;
+	// 	background-color:$dark-card;
+	// }
+	#lineChart{
+		.apexcharts-series rect{
+			fill:rgba($white,0.1);
+		}
+	}
+	.recent-sell{
+		.table{
+			color:#b5b5b5;
+			th{
+				color:$white;
+				border-color:$d-border;
+			}
+		}
+	}
+	.dashboard-n-select{
+		background:transparent;
+	}
+	.event-card{
+		background:rgba($white,0.1);
+		svg{	
+			&.right{
+				path{
+					fill:$white;
+				}
+			}
+			&.dolor{
+				path{
+					fill:$white;
+				}
+			}
+			&.calendar-icon{
+				path{
+					fill:$white;
+				}
+			}
+			&.location{
+				g path{
+					stroke:$white;
+				}
+			}
+		}
+	}
+	.customer-table{
+		background:$dark-card;
+		color:#b5b5b5;
+	}
+	.user-ico{
+		path{
+			fill:$white;
+		}
+	}
+	.btn-close{
+		background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+	}
+	#pieChart{
+		.apexcharts-pie-series{
+			path{
+				stroke:$dark-card;
+			}
+		}
+	}
+	.chartseries{
+		.apexcharts-legend-text{
+			color:rgba($white,0.6)!important;
+		}
+	}
+	.deznav .copyright p{
+		color:rgba($white,0.6);
+	}
+	
+	.table.dataTable>thead>tr>th{
+		border-color:$d-border!important;
+	}
+	.notification_dropdown .dropdown-menu-end .all-notification{
+		border-color:$d-border;
+	}
+	.default-select.dashboard-n-select .btn {
+		background-color:transparent!important;
+	}
+	.compose-content .dropzone{
+		background-color:$d-bg!important;
+		border-color:$d-border
+	}
+	.fc-theme-standard td, .fc-theme-standard th,
+	.fc-theme-standard .fc-scrollgrid.fc-scrollgrid-liquid, .fc-scrollgrid, table{
+		border-color:$d-border;
+	}
+	.fc-daygrid-dot-event{
+		background-color:$d-border;
+		border-color:$d-border;
+	}
+	.table thead th{
+		border-color:$d-border!important;
+	}
+	.table thead th{
+		color:$white;
+	}
+	.logo-compact{
+		filter:brightness(20.5);
+	}
+	.svg-icons-ov{
+		border-color:$d-border;
+	}
+	.svg-icons-ov.style-1 .svg-icons-prev,
+	.svg-icons-ov .svg-icon-popup .btn{
+		background-color:$d-bg;
+	}
+	.cm-content-box{
+		background-color:$dark-card;
+	}
+	.cm-content-box .cm-content-body,
+	.datepicker.datepicker-dropdown,
+	.menu-tabs{
+		border-color:$d-border;
+	}
+	.datepicker.datepicker-dropdown th{
+		color:#eee!important;
+		&.datepicker-switch:hover{
+			background-color: $d-bg;
+		}
+	}
+	.ck-editor__editable, .ck.ck-toolbar .ck.ck-toolbar__separator{
+		 background-color:$d-bg!important;
+	}
+	.ck.ck-editor .ck.ck-toolbar,
+	.new-scroll{
+		background-color:$d-bg;
+	}
+	.dd-handle.move-media + .accordion-button{
+		background-color:$dark-card;
+	}
+	.dd .accordion-body,
+	.dz-terms,
+	.cm-content-box.style-1 .content-title{
+		border-color:$d-border;
+	}
+	.accordion-danger-solid .accordion-button{
+		border-color:$danger;
+	}
+	.btn-card{
+		&.text-primary{
+			color:var(--primary)!important;
+		}
+	
+	}
+	.border-end{
+		border-color:$d-border!important;
+	}
+	.daterangepicker{
+		background:$d-bg;
+		border-color:var(--primary);
+		.calendar-table{
+			border-color:var(--primary);
+			background:$d-bg;
+			.table-condensed{
+				td{
+					&:hover{
+						background-color:var(--primary);
+						color:$white;
+					}
+				}
+			}
+		}
+        &:after{
+            border-bottom: 6px solid $d-bg;
+        }
+	}
+    
+    .daterangepicker select.hourselect
+    , .daterangepicker select.minuteselect
+    , .daterangepicker select.secondselect
+    , .daterangepicker select.ampmselect{
+            background: $d-bg;
+            border: 1px solid $d-border;
+            color:$white;
+    }
+    
+	.daterangepicker td.off, 
+	.daterangepicker td.off.in-range,
+	.daterangepicker td.off.start-date, 
+	.daterangepicker td.off.end-date{
+		background-color:transparent;
+		&:hover{
+			background-color:var(--primary);
+			color:$white;			
+		}
+	}
+	button.cancelBtn.btn.btn-sm.btn-inverse{
+		background-color:$dark-card;	
+	}
+	.clockpicker-plate{
+		background-color:$d-bg;
+		border-color:$d-border;	
+	}
+	.dtp > .dtp-content{
+		background-color:$d-bg;
+	}
+	.dtp table.dtp-picker-days tr > td > a, .dtp .dtp-picker-time > a{
+		color:$white;
+	}
+	.daterangepicker .drp-buttons,.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred{
+		border-color:$d-border;
+	}
+	.clockpicker-popover .popover-content{
+		background-color:$dark-card;
+	}
+	.popover-title{
+		background-color:$d-bg;
+	}
+	.note-editor.note-frame .note-statusbar,.form-wizard .nav-wizard li .nav-link span,.svg-icons-ov.style-1 .svg-icons-prev,.svg-icons-ov .svg-icon-popup .btn{
+		background-color:$d-bg;
+	}
+	.sidebar-right .bootstrap-select .btn{
+		background-color:$white!important;
+		border-color:$border!important;
+		
+	}
+	.toolbar{
+		.input-group-text i{
+			color:$white;
+		}
+	}
+	.nav{
+			&.tab-icon{
+	
+				.nav-link.active{
+					color:var(--primary);
+
+				}
+			}
+	
+		
+	
+	}  
+	.pagination-info .page-item .page-link{
+		&:hover{
+
+			color:$white;
+			
+		}
+
+	}
+	.select2-container--classic .select2-search--inline .select2-search__field{
+
+		background-color:$dark-card!important;
+	}
+	.fc .fc-col-header-cell-cushion{
+		color:$white;
+
+	}
+	.search-area{
+		border-color:$d-border;
+	}
+	.header-right .header-profile>a.nav-link{
+		border-color:$d-border;
+	}
+	.email-left-body.active{
+		background-color:$d-bg;
+	}
+	.email-tools-box.active:before{
+		background-color:$white;
+	}
+	.apexcharts-tooltip.apexcharts-theme-light{
+		background-color:$d-bg;
+	}
+	.apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title{
+		background-color:$d-bg!important;
+	}
+	a {
+		color:#eee;
+	}
+	.admin-settings{
+		.dropdown{
+			.dropdown-menu{
+				&.show{
+					background-color:$white!important;
+					box-shadow:0px 0px 40px 0px rgba(82, 63, 105, 0.1);
+					.dropdown-item{
+						background-color:#eee;
+						color:var(--primary);
+						&.active{
+							background-color:var(--rgba-primary-1);
+						}
+					}
+				}
+			}
+		}
+	}
+	.dd-dragel .accordion-item.dd-item{
+		background-color: $dark-card;
+	}
+	.form-control:disabled, .form-control[readonly]{
+		background: $d-bg!important;
+	}
+	.select2-container--default .select2-search--dropdown .select2-search__field,
+	.select2-container .select2-search--inline .select2-search__field,
+	.select2-label{
+		color: #fff;
+	}
+	input[type=file]::file-selector-button {
+		color: #949e9a;
+	}
+	&[direction="rtl"] .header-right .header-profile > a.nav-link{
+		border-color: $d-border;
+	}
+	.text-hover:hover {
+		color: var(--primary);
+	}
+	.card-link:hover {
+		color: var(--primary);
+	}
+	.ct-grid{
+		stroke:  $d-border;
+	}
+	.daterangepicker td.in-range{
+		background-color: $dark-card;
+	}
+	.daterangepicker .calendar-table .next span, .daterangepicker .calendar-table .prev span{
+		border-color: #fff;
+	}
+	table.dataTable > tbody > tr.child ul.dtr-details > li{
+		border-color: $d-border;
+	}
+	table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before, table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+		color : #fff;
+	}
+	.form-text{
+		color: #fff;
+	}
+	.btn-primary {
+		.text-primary{
+			color: var(--primary)!important;
+		}
+	}
+	.react-calendar{
+		background: #2f363e;
+		color: $white;
+	}
+	button.react-calendar__tile.react-calendar__month-view__days__day{
+		color: $white;
+		&:hover{
+			color: $black;
+		}
+	}
+	span.react-calendar__navigation__label__labelText.react-calendar__navigation__label__labelText--from{
+		color: $white;
+	}
+	button.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view__days__day, button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--range.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd.react-calendar__tile--rangeBothEnds.react-calendar__month-view__days__day{
+		background: var(--primary) !important;
+	}
+	.accord-data .menu-accord .accordion-button {
+		background: $dark-card;
+	}
+	.accord-data .menu-ac-item .accordion-body{
+		border-color: $d-border;
+	}
+	.custom-react-select>div:nth-child(3){
+		border-color: $d-border !important;
+		background-color: $dark-card;
+	}
+	.ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+		border-color: $d-border;
+	}
+}

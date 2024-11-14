@@ -1,0 +1,43 @@
+[
+    {
+        "id":1,  "Cust_Id":"#0012141", "Date_Join":"12/01/2021", "Cust_Name": "Cive Slauw", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"India",  "Price": "$1,100" 
+    },
+    {
+        "id":2,  "Cust_Id":"#0012252", "Date_Join":"13/02/2021", "Cust_Name": "Bella Simatupang", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"Chaina",  "Price": "$1,255" 
+    },
+    {
+        "id":3,  "Cust_Id":"#0012363", "Date_Join":"14/03/2021", "Cust_Name": "Andrew Stevano", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"France",  "Price": "$1,199" 
+    },
+    {
+        "id":4,  "Cust_Id":"#0012474", "Date_Join":"18/05/2022", "Cust_Name": "Marquezz", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"Japan",  "Price": "$1,254" 
+    },
+    {
+        "id":5,  "Cust_Id":"#0012585", "Date_Join":"20/07/2021", "Cust_Name": "Thomas", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"Tokiyo",  "Price": "$1,085" 
+    },
+    {
+        "id":6,  "Cust_Id":"#0012696", "Date_Join":"25/10/2020", "Cust_Name": "Kevin Hurt", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"London",  "Price": "$1,336" 
+    },
+    {
+        "id":7,  "Cust_Id":"#0012697", "Date_Join":"13/05/2023", "Cust_Name": "Andrew Stevano", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"London",  "Price": "$1,336" 
+    },
+    {
+        "id":8,  "Cust_Id":"#0012754", "Date_Join":"10/12/2022", "Cust_Name": "Marquezz", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"Japan",  "Price": "$1,254" 
+    },
+    {
+        "id":9,  "Cust_Id":"#0012982", "Date_Join":"17/05/2022", "Cust_Name": "Bella Simatupang", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"Chaina",  "Price": "$1,255" 
+    },
+    {
+        "id":10,  "Cust_Id":"#0012963", "Date_Join":"26/04/2021", "Cust_Name": "Andrew Stevano", "TickOrd":"The Story Of Danaou Taba (Musical Drama)", 
+        "Location":"France",  "Price": "$1,199" 
+    }
+]       
+    

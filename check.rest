@@ -1,0 +1,11 @@
+### Variable Definitions
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZklkIjoxMCwic3RhZmZFbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN0YWZmUm9sZSI6IkFkbWluIiwic3RhZmZOYW1lIjoiYWRtaW4gYWRtaW4iLCJzdGFmZk1vYmlsZSI6IjEyMzQ1Njc4OTAiLCJpYXQiOjE3MjU2MDQ1NzEsImV4cCI6MTcyNTY5MDk3MX0.qrEswSmirK1X61FSa2MZsAxjifCHwIwhWlPiLjhKPds
+
+GET http://192.168.1.16:4000/admin/agents
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "email":"admin@gmail.com",
+  "password":"123456"
+}
