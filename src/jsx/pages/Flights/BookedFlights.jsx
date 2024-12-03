@@ -103,7 +103,7 @@ function BookedFlights() {
         },
         { name: 'Agent Email', selector: row => row.email || '', sortable: true, wrap: true, minWidth: '250px' },
         { name: 'Booking Status', selector: row => row.details?.[0]?.booking_status || '', sortable: true, wrap: true },
-        { name: 'PNR', selector: row => row.PNR || '', sortable: true, wrap: true },
+        { name: 'PNR', selector: row => row.GDSPNR || '', sortable: true, wrap: true },
         { name: 'Published Amount', selector: row => row.total_net_fare || 0, sortable: true, wrap: true },
         { name: 'Sector', selector: row => `${row.details?.[0]?.origin || ''} - ${row.details?.[0]?.destination || ''}`, sortable: true, wrap: true },
     ];

@@ -68,12 +68,16 @@ function HoldFlights() {
 
         return (
             (log.booking_id || '').toString().toLowerCase().includes(bookingIdSearch) &&
-            (log.PNR || '').toString().toLowerCase().includes(pnrSearch) &&
+            (log.GDSPNR || '').toString().toLowerCase().includes(pnrSearch) &&
             (
                 search === '' ||
                 (log.booking_id || '').toString().toLowerCase().includes(search) ||
                 (log.PNR || '').toString().toLowerCase().includes(search) ||
-                (log.details?.[0]?.booking_status || '').toString().toLowerCase().includes(search)
+                (log.email || '').toString().toLowerCase().includes(search) ||
+                (log.total_net_fare || '').toString().toLowerCase().includes(search) ||
+                (log.details?.[0]?.booking_status || '').toString().toLowerCase().includes(search)||
+                (log.details?.[0]?.origin || '').toString().toLowerCase().includes(search) ||
+                (log.details?.[0]?.destination || '').toString().toLowerCase().includes(search)
             )
         );
     });
@@ -103,7 +107,7 @@ function HoldFlights() {
         },
         { name: 'Agent Email', selector: row => row.email || '', sortable: true, wrap: true, minWidth: '250px' },
         { name: 'Booking Status', selector: row => row.details?.[0]?.booking_status || '', sortable: true, wrap: true },
-        { name: 'PNR', selector: row => row.PNR || '', sortable: true, wrap: true },
+        { name: 'PNR', selector: row => row.GDSPNR || '', sortable: true, wrap: true },
         { name: 'Published Amount', selector: row => row.total_net_fare || 0, sortable: true, wrap: true },
         { name: 'Sector', selector: row => `${row.details?.[0]?.origin || ''} - ${row.details?.[0]?.destination || ''}`, sortable: true, wrap: true },
     ];
