@@ -12,17 +12,15 @@ import { ErrorMessage } from "@hookform/error-message";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import * as XLSX from "xlsx";
-import pdfMake from 'pdfmake/build/pdfmake';
-import * as vfsFonts from 'pdfmake/build/vfs_fonts';
-// import pdfFonts from 'pdfmake/build/vfs_fonts';
-// import {pdfFonts} from 'pdfmake/build/vfs_fonts';
 import logo from "../../../assets/images/TDO_logo1.png";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {Logout} from "../../../store/actions/AuthActions.js";
+import pdfMake from "pdfmake/build/pdfmake";
+import vfs from "pdfmake/build/vfs_fonts";
 
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
-pdfMake.vfs = vfsFonts.pdfMake.vfs;
+pdfMake.vfs = vfs;  // Use `vfs` instead of `pdfFonts.pdfMake.vfs`
+
 
 // Calculate the closing balance (Credit - Debit)
 const calculateClosingBalance = (transactions) => {
@@ -268,11 +266,6 @@ function SearchAgency() {
         setValue('type', 0);
     };
 
-    // const handlePageChange = (page) => {
-    //     console.log("Current Page:", page); // Log to check page changes
-    //     setCurrentPage(page);
-    // };
-
     useEffect(() => {
         GetPartners();
     }, [currentPage]);
@@ -299,7 +292,6 @@ function SearchAgency() {
             (!to || transactionDate <= to)
         );
     });
-
 
     const handleDateChange = (e) => {
         const { name, value } = e.target;

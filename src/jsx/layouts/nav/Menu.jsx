@@ -317,12 +317,8 @@ export const MenuList = [
                 hasMenu: true,
                 content: [
                     {
-                        title: 'Manage Markups',
-                        to: 'manage-flight-markups',
-                    },
-                    {
-                        title: 'Allot Markups',
-                        to: 'allot-flight-markups',
+                        title: 'Flight Commission',
+                        to: 'manage-flight-commission',
                     },
                 ],
             },

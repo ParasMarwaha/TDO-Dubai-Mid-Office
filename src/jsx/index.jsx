@@ -165,6 +165,8 @@ import FlightSearchDetails from "./pages/Logs/Flight Search Logs/FlightSearchDet
 import AllotMarkup from "./pages/Settings/Markups/AllotMarkup.jsx";
 import BookedFlights from "./pages/Flights/BookedFlights.jsx";
 import HoldFlights from "./pages/Flights/HoldFlights.jsx";
+import FlightCommercial from "./pages/Settings/Flight/FlightCommercial.jsx";
+import AddFlightCommercial from "./pages/Settings/Flight/AddFlightCommercial.jsx";
 
 const Markup = () => {
     const allroutes = [
@@ -207,9 +209,11 @@ const Markup = () => {
 
 
         //// Control Panel
-        {url: "manage-flight-markups", component: <ManageMarkups/>},
-        {url: "add-flight-markups", component: <AddFlightMarkups/>},
-        {url: "allot-flight-markups", component: <AllotMarkup/>},
+        // {url: "manage-flight-markups", component: <ManageMarkups/>},
+        {url: "manage-flight-commission", component: <FlightCommercial/>},
+        // {url: "add-flight-markups", component: <AddFlightMarkups/>},
+        {url: "add-flight-commercial", component: <AddFlightCommercial/>},
+        // {url: "allot-flight-markups", component: <AllotMarkup/>},
         {url: "service-fee", component: <ServiceFee/>},
         {url: "fare-type", component:<FareType />},
         {url: "supplier", component: <Supplier/>},
