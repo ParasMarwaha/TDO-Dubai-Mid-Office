@@ -2,7 +2,7 @@ import Select from "react-select";
 import {Controller, useForm} from "react-hook-form";
 import React, {useEffect, useState} from "react";
 import {CCard, CCardHeader, CCardBody} from "@coreui/react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate,useLocation} from "react-router-dom";
 import {useDispatch} from "react-redux";
 
 const products = ["Air Ticket", "Fixed Departure"];
@@ -10,24 +10,26 @@ const markupTypes = ["PLB", "Non PLB"];
 const airTicket = ["All", "TBO", "Tripjack"];
 const fixedDeparture = ["All", "Airiq", "Travelopedia"];
 const bookingTypes = ["International", "Domestic"];
-// const fareTypes = ["ALL", "SALE", "SAVER", "REGULAR", "PUBLISH", "PUBLISHED", "ECO LITE", "ECO FLEXI", "INSTANTPUR", "ECO STANDARD", "CORP CONNECT"];
 
 import {Server_URL,adminAuthToken} from "../../../../helpers/config.js";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {Logout} from "../../../../store/actions/AuthActions.js";
 
-const AddFlightCommercial = () => {
+const EditFlightCommercial = () => {
     const {
         register,
         handleSubmit,
         formState: {errors},
         reset,
-        control
+        setValue,
+        control,
+        trigger
     } = useForm();
 
     /* ---------------------------------------- */
     const dispatch = useDispatch();
+    const location = useLocation();
     const navigate = useNavigate();
     const [fareTypes, setFareTypes] = useState([]);
     const [carriers, setCarriers] = useState([]);
@@ -72,7 +74,7 @@ const AddFlightCommercial = () => {
                 return onLogout()
             }
             if (carriersData.responseCode === 2) {
-               // console.log(carriersData.data)
+                // console.log(carriersData.data)
                 setCarriers(carriersData.data);
             } else {
                 Swal.fire({ icon: 'error', title: carriersData.message });
@@ -92,43 +94,50 @@ const AddFlightCommercial = () => {
         { value: 'All', label: 'All' },
         ...carriers.map(carrier => ({ value: carrier.AirlineIndex, label: carrier.Name }))
     ];
+
+    const fareOptions = [
+        { value: 'All', label: 'All' },
+        ...fareTypes.map(faretypes => ({ value: faretypes.id, label: faretypes.fare }))
+    ];
     function onLogout() {
         dispatch(Logout(navigate));
+    }
+    async function showDataInForm(row) {
+        console.log(row);
+        const {
+            id, product, vendor, booking_type, fare_type,
+            airline, carriers, fare, markup_type, markup_plb, markup_percentage, group_type
+        } = row;
+
+        // Set simple fields
+        setValue("id", id);
+        checkProduct(product);
+        setValue("product", product);
+        setTimeout(() => setValue("vendor", vendor), 100);
+        setValue("booking_type", booking_type);
+        setValue("markup_type", markup_type);
+        if (markup_type === "Non PLB") {
+            setIsNonPLB(true);
+        }
+        setValue("markup_plb", markup_plb);
+        setPercentage(markup_percentage);
+        setValue("group_type", group_type);
+
+        // Update controlled components explicitly
+        setValue("fare_type", { value: fare_type, label: fare });
+        setValue("airline", { value: airline, label: carriers });
+
+        // Trigger validation to update form state
+        await trigger(["fare_type", "airline"]);
     }
 
     useEffect(() => {
         fetchData().then()
     }, []);
 
-    /* ---------------------------------------- */
-
-   // const [groupTypes, setGroupTypes] = useState(null);
-
-    // async function ReadGroupTypes() {
-    //     try {
-    //         let data = localStorage.getItem(adminAuthToken);
-    //         if (data) {
-    //             data = JSON.parse(data);
-    //         }
-    //         const res = await axios.get(Server_URL + "admin/user-group2", {
-    //             headers: {'Authorization': `Bearer ${data.idToken}`}
-    //         })
-    //         // console.log(res.data)
-    //
-    //         if (!res.data.error) {
-    //             // console.log(res.data.recordset)
-    //             setGroupTypes(res.data.recordset);
-    //         }
-    //     } catch (e) {
-    //         errorToast(e.message);
-    //     }
-    // }
-    //
-    // useEffect(() => {
-    //     ReadGroupTypes().then();
-    // }, []);
-
-    /* ---------------------------------------- */
+    useEffect(()=>{
+        showDataInForm(location.state.row);
+    },[]);
 
     // const [selectedOptionAirline, setSelectedOptionAirline] = useState(null);
 
@@ -137,6 +146,7 @@ const AddFlightCommercial = () => {
     const [isNonPLB, setIsNonPLB] = useState(null);
 
     function checkMarkupType(e) {
+        console.log("Check")
         e.target.value === 'Non PLB' ? setIsNonPLB(true) : setIsNonPLB(false)
     }
 
@@ -152,22 +162,20 @@ const AddFlightCommercial = () => {
 
     const [product, setProduct] = useState(null);
 
-    function checkProduct(e) {
-        const product = e.target.value;
+    function checkProduct(product) {
 
         if (!product) {
             setProduct(null);
-            errorToast('Please Select Product.');
+            Swal.fire({ icon: 'error', title: "Please Select Product" });
             return false;
         }
-
         product === 'Air Ticket' ? setProduct('AT') : setProduct('FD');
     }
 
     /* ---------------------------------------- */
 
     async function onSubmit(data) {
-setSubmitting(true)
+        setSubmitting(true)
         console.log(data)
         try {
             // Prepare data for submission
@@ -179,7 +187,8 @@ setSubmitting(true)
             } else if (!data.markup_plb) {
                 data['markup_plb'] = null;  // You can set this to null or handle as needed
             }
-            data['airline'] = [data.airline.value];
+            data['airline'] = [data.airline.value]
+            data['fare_type'] = data.fare_type.value
 
             // Get token from localStorage for auth
             let dataLS = localStorage.getItem(adminAuthToken);
@@ -188,7 +197,7 @@ setSubmitting(true)
             }
 
             // Send data to server
-            const res = await axios.post(Server_URL + "admin/add-flight-commercial", data, {
+            const res = await axios.post(Server_URL + "admin/edit-flight-commercial", data, {
                 headers: {'Authorization': `Bearer ${dataLS.idToken}`}
             });
 
@@ -198,9 +207,11 @@ setSubmitting(true)
             } else {
                 // Reset form after successful submission
                 reset();
-                setPercentage(0);
+                setPercentage(percentage);
                 setIsNonPLB(null);
-                Swal.fire({ icon: 'success', title: res.data.message });
+                Swal.fire({ icon: 'success', title: res.data.message }).then(() => {
+                    navigate('/manage-flight-commission');
+                });
                 reset({ airline: [] }); // Resets the 'airline' field in the form
             }
         } catch (e) {
@@ -213,7 +224,7 @@ setSubmitting(true)
     return (
         <CCard>
             <CCardHeader className="card-header-bg">
-                <h4 className="mb-0 primary-color">Create Flight Commercial</h4>
+                <h4 className="mb-0 primary-color">Edit Flight Commercial</h4>
             </CCardHeader>
             <CCardBody>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -268,12 +279,20 @@ setSubmitting(true)
                             <label htmlFor="fare_type">
                                 Fare Type <span className="text-danger">*</span>
                             </label>
-                            <select name="fare_type" id="fare_type" className="form-select"
-                                    {...register('fare_type', {required: "This is a required field."})}>
-                                <option value="">--Select Product--</option>
-                                <option value="All">All</option>
-                                {fareTypes.map(x => <option value={x.id} key={x.id}>{x.fare}</option>)}
-                            </select>
+                            <Controller
+                                name="fare_type"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        // isMulti
+                                        options={fareOptions}
+                                        placeholder="Select Fare Type"
+                                        className="react-select-container"
+                                        classNamePrefix="react-select"
+                                    />
+                                )}
+                            />
 
                             {errors?.fare_type && <p className='text-danger'>{errors?.fare_type?.message}</p>}
                         </div>
@@ -367,7 +386,7 @@ setSubmitting(true)
                         </div>
 
                         <div className="col-12">
-                            <button className="btn btn-primary px-5" disabled={submitting}>{submitting ? 'Submitting...' : 'Create'}</button>
+                            <button className="btn btn-primary px-5" disabled={submitting}>{submitting ? 'Editing...' : 'Edit'}</button>
                         </div>
                     </div>
                 </form>
@@ -375,4 +394,4 @@ setSubmitting(true)
         </CCard>
     )
 }
-export default AddFlightCommercial;
+export default EditFlightCommercial;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
-import { Server_URL, adminAuthToken } from '../../../../helpers/config.js';
+import { Server_URL, adminAuthToken,customStyles } from '../../../../helpers/config.js';
 import PageTitle from "../../../layouts/PageTitle.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -11,9 +11,12 @@ import DataTable from 'react-data-table-component';
 function FlightCommercial() {
     const [markups, setMarkups] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [expandedPlanId, setExpandedPlanId] = useState(null);  // Track expanded plan
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [logs, setLogs] = useState([]);
+
+
 
     function onLogout() {
         dispatch(Logout(navigate));
@@ -38,7 +41,7 @@ function FlightCommercial() {
                     dataLS = JSON.parse(dataLS);
                 }
 
-                const api = Server_URL + `admin/delete-flight-markup/${id}`;
+                const api = Server_URL + `admin/delete-flight-commercial/${id}`;
                 let response = await fetch(api, {
                     method: "DELETE",
                     headers: {
@@ -77,7 +80,7 @@ function FlightCommercial() {
                 throw new Error('No authentication token found.');
             }
             const parsedData = JSON.parse(dataLS);
-            const response = await fetch(`${Server_URL}admin/markups`, {
+            const response = await fetch(`${Server_URL}admin/get-flight-commercial`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${parsedData.idToken}`
@@ -90,6 +93,8 @@ function FlightCommercial() {
             const result = await response.json();
             if (result.responseCode === 2) {
                 setMarkups(result.data);
+                setLogs(result.data);
+                console.log(result.data);
             } else {
                 Swal.fire({ icon: 'error', title: result.message });
             }
@@ -105,63 +110,110 @@ function FlightCommercial() {
     }, []);
 
     // Define columns for the DataTable
-    const columns = [
+    const columns = useMemo(() => [
         {
-            name: 'Sr No.',
-            selector: (row, index) => index + 1,
-            center: true
-        },
-        {
-            name: 'Plan Name',
+            name: "",
+            button: true,
             cell: row => (
-                <span
-                    style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
-                    onClick={() => handlePlanClick(row.id)}
-                >
-                    {row.plan_name}
-                </span>
+                <i
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => deletePlan(row?.id)}
+                    className="fa fa-trash icon-size text-primary"
+                ></i>
             ),
-            center: true
+            width: '50px',
         },
         {
-            name: 'Type',
-            selector: row => row.type,
-            center: true
-        },
-        {
-            name: 'Markup Value',
-            selector: row => row.value,
-            center: true
-        },
-        {
-            name: 'Cancellation Charge',
-            selector: row => row.cancellation,
-            center: true
-        },
-        {
-            name: 'Rescheduling Charge',
-            selector: row => row.rescheduling,
-            center: true
-        },
-        {
-            name: '',
+            name: "",
+            button: true,
             cell: row => (
-                <button
-                    type="button"
-                    className="btn btn-danger btn-sm"
-                    onClick={() => deletePlan(row.id)}
-                    title="Delete Plan"
-                >
-                    <i className="fa fa-trash" aria-hidden="true" style={{ fontSize: '16px' }}></i>
-                </button>
+                <Link to="/edit-flight-commercial" state={{ row: row }}>
+                    <i className="fa fa-edit icon-size text-primary"></i>
+                </Link>
             ),
-            center: true
-        }
-    ];
+            width: '50px',
+        },
+        {
+            name: "Product",
+            selector: row => row?.product,
+            sortable: true,
+            minWidth: '100px',
+            wrap:true
+        },
+        {
+            name: "Vendor",
+            selector: row => row?.vendor,
+            sortable: true,
+            minWidth: '90px',
+            wrap: true
+        },
+        {
+            name: "Booking Type",
+            selector: row => row?.booking_type,
+            sortable: true,
+            minWidth: '140px',
+            wrap: true
+        },
+        {
+            name: "Fare Type",
+            selector: row => row?.fare,
+            sortable: true,
+            minWidth: '110px',
+            wrap: true
+        },
+        {
+            name: "Airline",
+            selector: row => row?.carriers,
+            sortable: true,
+            minWidth: '100px',
+            wrap: true
+        },
+        {
+            name: "Markup Type",
+            selector: row => row?.markup_type,
+            sortable: true,
+            minWidth: '130px',
+            wrap: true
+        },
+        {
+            name: "Markup PLB",
+            selector: row => row?.markup_plb,
+            sortable: true,
+            minWidth: '120px',
+            wrap: true
+        },
+        {
+            name: "Markup %",
+            selector: row => row?.markup_percentage,
+            sortable: true,
+            minWidth: '110px',
+            wrap: true
+        },
+        {
+            name: "Group Type",
+            selector: row => row?.group_type,
+            sortable: true,
+            minWidth: '120px',
+            wrap: true
+        },
+    ], []);
 
-    const handlePlanClick = (id) => {
-        setExpandedPlanId(expandedPlanId === id ? null : id);  // Toggle plan details visibility
-    };
+    const filteredLogs = logs.filter(log => {
+        const search = searchTerm.toLowerCase();
+
+        return (
+            ((log.product || '').toLowerCase().includes(search)) || // Product column
+            ((log.vendor || '').toLowerCase().includes(search)) || // Vendor column
+            ((log.booking_type || '').toLowerCase().includes(search)) || // Booking Type column
+            ((log.fare || '').toLowerCase().includes(search)) || // Fare Type column
+            ((log.carriers || '').toLowerCase().includes(search)) || // Airline column
+            ((log.markup_type || '').toLowerCase().includes(search)) || // Markup Type column
+            ((log.markup_plb?.toString() || '').toLowerCase().includes(search)) || // Markup PLB column
+            ((log.markup_percentage?.toString() || '').toLowerCase().includes(search)) || // Markup % column
+            ((log.group_type || '').toLowerCase().includes(search))  // Group Type column
+        );
+    });
+
 
     return (
         <div>
@@ -170,20 +222,33 @@ function FlightCommercial() {
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <h2 className="text-center"><b>Already Added Markups:</b></h2>
-                        <hr />
+                        <h2 className="text-center"><b>Commercial Details</b></h2>
+                        <hr/>
                         <div className="bg-light-subtle py-2 mb-3">
                             <Link to="/add-flight-commercial">
                                 <button type="button" className="btn btn-primary"> + Create New</button>
                             </Link>
                         </div>
 
+                        <div className="mb-3 offset-lg-9">
+                            <input
+                                type="text"
+                                placeholder="Filter Data Table"
+                                className="form-control"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={{width: '250px', height: '40px'}}
+                                disabled={loading}
+                            />
+                        </div>
+
                         <DataTable
                             columns={columns}
-                            data={markups}
+                            data={filteredLogs}
                             progressPending={loading}
                             highlightOnHover
                             pagination
+                            style={customStyles}
                         />
                     </div>
                 </div>
