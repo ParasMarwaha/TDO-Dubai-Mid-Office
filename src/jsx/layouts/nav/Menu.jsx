@@ -4,7 +4,7 @@ import {HiUsers} from "react-icons/hi2";
 //import {FaGlobeAsia} from "react-icons/fa";
 //import {PiAirplaneTakeoffFill} from "react-icons/pi";
 //import {RiBankFill} from "react-icons/ri";
-import {FaFileSignature, FaPlaneDeparture, FaUserCircle} from "react-icons/fa";
+import {FaFileSignature, FaPlaneDeparture, FaUserCircle, FaUserCog} from "react-icons/fa";
 import {FaPlaneCircleCheck, FaUserTie} from "react-icons/fa6";
 import {IoAccessibilitySharp, IoSettingsSharp} from "react-icons/io5";
 //import {RiHotelFill} from "react-icons/ri";
@@ -96,12 +96,12 @@ export const MenuList = [
     //     ],
     // },
 
-    // User Group
-    // {
-    //     title: 'User Group',
-    //     iconStyle: <FaUserCog/>,
-    //     to: 'user-group',
-    // },
+    /// User Group
+    {
+        title: 'User Group',
+        iconStyle: <FaUserCog/>,
+        to: 'user-group',
+    },
 
     /// Logs
     {
