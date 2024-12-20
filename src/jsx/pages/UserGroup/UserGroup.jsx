@@ -74,38 +74,38 @@
 //         });
 //     }
 
-//     async function onCreate(data) {
-//         try {
-//             let dataLS = localStorage.getItem(adminAuthToken);
-//             if (dataLS) dataLS = JSON.parse(dataLS);
-//
-//             const api = Server_URL + `admin/user-group`;
-//
-//             let response = await fetch(api, {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                     "Authorization": `Bearer ${dataLS.idToken}`
-//                 },
-//                 body: JSON.stringify(data),
-//             });
-//             response = await response.json();
-//
-//             handleResponse(response, () => {
-//                 resetCreate();
-//                 closeCreateModal();
-//                 fetchUserGroups();
-//             });
-//         } catch (e) {
-//             Swal.fire({
-//                 icon: "error",
-//                 title: "An error occurred",
-//                 text: e.message,
-//                 showConfirmButton: true,
-//                 timer: 3000,
-//             });
-//         }
-//     }
+    // async function onCreate(data) {
+    //     try {
+    //         let dataLS = localStorage.getItem(adminAuthToken);
+    //         if (dataLS) dataLS = JSON.parse(dataLS);
+    //
+    //         const api = Server_URL + `admin/user-group`;
+    //
+    //         let response = await fetch(api, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${dataLS.idToken}`
+    //             },
+    //             body: JSON.stringify(data),
+    //         });
+    //         response = await response.json();
+    //
+    //         handleResponse(response, () => {
+    //             resetCreate();
+    //             closeCreateModal();
+    //             fetchUserGroups();
+    //         });
+    //     } catch (e) {
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "An error occurred",
+    //             text: e.message,
+    //             showConfirmButton: true,
+    //             timer: 3000,
+    //         });
+    //     }
+    // }
 
 //     async function onEdit(data) {
 //         try {
@@ -442,8 +442,8 @@
 
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { format } from "date-fns";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { Server_URL, adminAuthToken, customStyles } from '../../../helpers/config.js';
 import PageTitle from "../../layouts/PageTitle.jsx";
@@ -489,6 +489,7 @@ function UserGroup() {
 
             const result = await response.json();
             if (result.responseCode === 2) {
+                console.log(result.data)
                 setUserGroups(result.data);
             } else {
                 Swal.fire({ icon: 'error', title: result.message });
@@ -523,6 +524,7 @@ function UserGroup() {
             button: true,
             cell: row => (
                 <i
+                    style={{ cursor: 'pointer' }}
                     onClick={() => openModal('edit', row)}
                     className="fa fa-edit icon-size text-primary">
                 </i>
@@ -602,8 +604,50 @@ function UserGroup() {
     }
 
     function closeModal() {
+        reset()
         setShowModal({ type: '', visible: false });
         setCurrentGroupId(null);
+    }
+
+    async function onCreate(data) {
+        console.log(data)
+        try {
+            let dataLS = localStorage.getItem(adminAuthToken);
+            if (dataLS) dataLS = JSON.parse(dataLS);
+
+            const api = Server_URL + `admin/user-group`;
+
+            let res = await fetch(api, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${dataLS.idToken}`
+                },
+                body: JSON.stringify(data),
+            });
+            res = await res.json();
+
+            if (res.responseCode === 2) {
+
+                Swal.fire({ icon: 'success', title: res.message }).then(()=>{
+                        reset();
+                        closeModal();
+                        fetchUserGroups();
+                    }
+                );
+            } else {
+                Swal.fire({ icon: 'error', title: res.message });
+            }
+        }
+        catch (e) {
+            Swal.fire({
+                icon: "error",
+                title: "An error occurred",
+                text: e.message,
+                showConfirmButton: true,
+                timer: 3000,
+            });
+        }
     }
 
     // Delete Group
@@ -733,7 +777,7 @@ function UserGroup() {
             </div>
 
             {/* Modal for Create/Edit User Group */}
-            <div className={`modal fade ${showModal.visible ? "show d-block" : "d-none"}`} tabIndex="-1" aria-hidden={!showModal.visible}>
+            <div className={`modal fade ${showModal.visible ? "show d-block" : "d-none"}`} tabIndex="-1" aria-hidden={!showModal.visible} style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -741,7 +785,7 @@ function UserGroup() {
                             <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form onSubmit={handleSubmit(showModal.type === 'edit' ? onSubmitEdit : () => {})}>
+                            <form onSubmit={handleSubmit(showModal.type === 'edit' ? onSubmitEdit : onCreate)}>
                                 <div className="mb-3">
                                     <label htmlFor="GroupName">Group Name <span className="text-danger">*</span></label>
                                     <input

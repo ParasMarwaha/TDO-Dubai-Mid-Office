@@ -194,10 +194,10 @@ export const MenuList = [
                 title: 'Hold Tickets',
                 to: 'hold-flights',
             },
-            // {
-            //     title: 'Flights Suppliers',
-            //     to: 'flight-supplier',
-            // },
+            {
+                title: 'Cancellation Queue',
+                to: 'cancel-flights',
+            },
         ],
     },
 

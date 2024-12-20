@@ -363,7 +363,8 @@ function SearchAgency() {
             name: 'Remarks',
             selector: row => row.remarks,
             sortable: true,
-            wrap: true
+            wrap: true,
+            minWidth: '100px'
         },
     ];
 
@@ -460,7 +461,7 @@ function SearchAgency() {
         // Convert the logo to base64
         let base64Logo;
         try {
-            base64Logo = await getBase64ImageFromUrl(logo);  // Convert logo to base64
+            base64Logo = await getBase64ImageFromUrl(logo); // Convert logo to base64
         } catch (error) {
             console.error("Error converting logo to base64", error);
             Swal.fire({ icon: 'error', title: 'Error loading logo for PDF export' });
@@ -483,89 +484,86 @@ function SearchAgency() {
 
         // Define the PDF document content
         const documentDefinition = {
+            pageSize: 'A4',
+            pageOrientation: 'portrait', // Keep vertical orientation
+            pageMargins: [10, 10, 10, 10], // Reduced margins
             content: [
-                // Header with logo on the left
                 {
                     columns: [
                         {
                             width: 'auto',
-                            image: base64Logo,  // Use the base64 logo here
-                            fit: [100, 100],  // Adjust logo size
-                            alignment: 'left',  // Align logo to the top left
+                            image: base64Logo,
+                            fit: [80, 80], // Smaller logo size
+                            alignment: 'left',
                         },
-                        { width: '*', text: '' },  // Empty space to push the title to the center
+                        { width: '*', text: '' },
                     ]
                 },
-
-                // Wallet Statement title centered in the next row
                 {
                     text: 'Wallet Statement',
                     style: 'header',
-                    alignment: 'center',  // Center the title
-                    margin: [0, 20, 0, 8],  // Add margin for spacing
+                    alignment: 'center',
+                    margin: [0, 20, 0, 8],
                 },
-
-                // Agency name and ID in a single row
                 {
                     columns: [
                         { text: `Agent Name: ${agentName}`, style: 'subheader', margin: [0, 10, 0, 0] },
                         { text: `Agency ID: ${agentDetails?.id || 'N/A'}`, style: 'subheader', alignment: 'right', margin: [0, 10, 0, 0] },
                     ]
                 },
-
-                // Opening and Closing balance in the same row
                 {
                     columns: [
                         { text: `${dateRange}`, style: 'subheader', margin: [0, 10, 0, 10] },
                         { text: `Closing Balance: ${closingBalance}`, style: 'subheader', alignment: 'right', margin: [0, 10, 0, 10] },
                     ]
                 },
-
-                // Transaction table with all the columns
                 {
                     table: {
                         headerRows: 1,
-                        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],  // Define widths for each column
+                        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', '20%'], // Wider Remarks column
                         body: [
-                            // Table headers including the new columns
                             ['Sr No.', 'Type', 'Approved By', 'Deposit', 'Withdraw', 'Transaction ID', 'Mode Of Payment', 'Date-Time', 'Remarks'],
                             ...filteredTransactions.map((transaction, index) => [
-                                index + 1,  // Sr No.
+                                index + 1,
                                 transaction.transaction_type,
                                 transaction.done_by,
-                                transaction.transaction_type === 'Credit' ? transaction.amount : '-',  // Deposit if 'Credit'
-                                transaction.transaction_type === 'Debit' || transaction.transaction_type === 'Flight Booked' ? transaction.amount : '-',  // Withdraw if 'Debit'
-                                transaction.transaction_id,  // Transaction ID
-                                transaction.mode_of_payment,  // Mode of Payment
-                                transaction.transaction_date_time,  // Date-Time
-                                transaction.remarks || '-'  // Remarks (if available)
+                                transaction.transaction_type === 'Credit' ? transaction.amount : '-',
+                                transaction.transaction_type === 'Debit' || transaction.transaction_type === 'Flight Booked' ? transaction.amount : '-',
+                                transaction.transaction_id,
+                                transaction.mode_of_payment,
+                                transaction.transaction_date_time,
+                                { text: transaction.remarks || '-', style: 'remarks', noWrap: false }, // Allow wrapping for Remarks
                             ]),
                         ],
                     },
                     layout: {
-                        fillColor: function (rowIndex) {
-                            return rowIndex === 0 ? '#CCCCCC' : null;  // Light grey background for the header row
-                        },
-                        hLineColor: '#E0E0E0',  // Light grey lines for horizontal lines
-                        vLineColor: '#E0E0E0',  // Light grey lines for vertical lines
+                        noWrap: false, // Allow text wrapping
+                        fillColor: (rowIndex) => (rowIndex === 0 ? '#CCCCCC' : null),
+                        hLineColor: '#E0E0E0',
+                        vLineColor: '#E0E0E0',
+                        defaultBorder: true,
                     },
                 },
             ],
             styles: {
                 header: {
-                    fontSize: 22,
+                    fontSize: 18,
                     bold: true,
                     alignment: 'center',
                     margin: [0, 20, 0, 8],
                 },
                 subheader: {
-                    fontSize: 12,
+                    fontSize: 10,
                     bold: true,
                 },
                 tableHeader: {
                     bold: true,
-                    fontSize: 10,
+                    fontSize: 8,
                     color: 'black',
+                },
+                remarks: {
+                    fontSize: 7,
+                    alignment: 'left',
                 },
             },
         };

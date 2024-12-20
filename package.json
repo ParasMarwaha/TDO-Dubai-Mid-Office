@@ -25,6 +25,7 @@
     "@n8tb1t/use-scroll-position": "^2.0.3",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.5",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.3",
