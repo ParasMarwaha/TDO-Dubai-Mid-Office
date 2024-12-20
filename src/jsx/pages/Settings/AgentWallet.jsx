@@ -532,7 +532,7 @@ function SearchAgency() {
                                 transaction.transaction_id,
                                 transaction.mode_of_payment,
                                 transaction.transaction_date_time,
-                                { text: transaction.remarks || '-', style: 'remarks', noWrap: false }, // Allow wrapping for Remarks
+                                { text: transaction.remarks || '-', style: 'remarks'}, // Allow wrapping for Remarks
                             ]),
                         ],
                     },
@@ -564,6 +564,7 @@ function SearchAgency() {
                 remarks: {
                     fontSize: 7,
                     alignment: 'left',
+                    noWrap: false,
                 },
             },
         };
