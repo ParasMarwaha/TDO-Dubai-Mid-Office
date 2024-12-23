@@ -64,73 +64,90 @@ function CancellationQueue() {
     const columns = useMemo(() => [
         {
             name: "",
-            button: true,
             cell: row => (
                 <Link to="/cancel-flights-details" state={{ row: row }}>
-                    <i className="fa fa-eye icon-size text-primary"></i>
+                    <i
+                        className="fa fa-eye icon-size text-primary"
+                        style={{cursor: 'pointer'}}  // Add cursor style to indicate it's clickable
+
+                    />
                 </Link>
             ),
             width: '50px',
         },
         {
-            name: "Product",
-            selector: row => row?.product,
+            name: "Booking Id",
+            selector: row => row?.booking_id,
             sortable: true,
             minWidth: '100px',
             wrap:true
         },
         {
-            name: "Vendor",
-            selector: row => row?.vendor,
+            name: "Request Type",
+            selector: row => row?.request_type,
             sortable: true,
             minWidth: '90px',
             wrap: true
         },
         {
-            name: "Booking Type",
-            selector: row => row?.booking_type,
+            name: "Requested By",
+            selector: row => row?.request_by,
             sortable: true,
             minWidth: '140px',
             wrap: true
         },
         {
-            name: "Fare Type",
-            selector: row => row?.fare,
+            name: "Requested On",
+            selector: row => row?.request_on,
             sortable: true,
             minWidth: '110px',
             wrap: true
         },
         {
-            name: "Airline",
-            selector: row => row?.carriers,
+            name: "Cancellation Status",
+            selector: row => row?.cancel_status,
             sortable: true,
             minWidth: '100px',
             wrap: true
         },
         {
-            name: "Markup Type",
-            selector: row => row?.markup_type,
+            name: "Remarks",
+            selector: row => row?.remarks,
             sortable: true,
             minWidth: '130px',
             wrap: true
         },
         {
-            name: "Markup PLB",
-            selector: row => row?.markup_plb,
+            name: "Cancel Charge",
+            selector: row => row?.cancel_charge,
             sortable: true,
             minWidth: '120px',
             wrap: true
         },
         {
-            name: "Markup %",
-            selector: row => row?.markup_percentage,
+            name: "Service Charge",
+            selector: row => row?.service_charge,
             sortable: true,
             minWidth: '110px',
             wrap: true
         },
         {
-            name: "Group Type",
-            selector: row => row?.group_type,
+            name: "VAT",
+            selector: row => row?.vat,
+            sortable: true,
+            minWidth: '120px',
+            wrap: true
+        },
+        {
+            name: "Refund Amount",
+            selector: row => row?.refund_amount,
+            sortable: true,
+            minWidth: '120px',
+            wrap: true
+        },
+        {
+            name: "Agent Remarks",
+            selector: row => row?.agent_remarks,
             sortable: true,
             minWidth: '120px',
             wrap: true

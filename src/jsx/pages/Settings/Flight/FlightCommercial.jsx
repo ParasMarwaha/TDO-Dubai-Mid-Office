@@ -191,7 +191,7 @@ function FlightCommercial() {
         },
         {
             name: "Group Type",
-            selector: row => row?.group_type,
+            selector: row => row?.group_name,
             sortable: true,
             minWidth: '120px',
             wrap: true
@@ -210,7 +210,7 @@ function FlightCommercial() {
             ((log.markup_type || '').toLowerCase().includes(search)) || // Markup Type column
             ((log.markup_plb?.toString() || '').toLowerCase().includes(search)) || // Markup PLB column
             ((log.markup_percentage?.toString() || '').toLowerCase().includes(search)) || // Markup % column
-            ((log.group_type || '').toLowerCase().includes(search))  // Group Type column
+            ((log.group_name || '').toLowerCase().includes(search))  // Group Type column
         );
     });
 

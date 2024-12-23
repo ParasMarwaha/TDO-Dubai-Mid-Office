@@ -209,8 +209,8 @@ const Markup = () => {
         ///Flights
         {url: "booked-flights", component: <BookedFlights/>},
         {url: "hold-flights", component: <HoldFlights/>},
-        {url: "cancel-flights", component: <CancellationQueue/>},
-        {url: "cancel-flights-details", component: <FlightCancellationDetails/>},
+        {url: "/cancel-flights", component: <CancellationQueue/>},
+        {url: "/cancel-flights-details", component: <FlightCancellationDetails/>},
 
 
         //// Control Panel

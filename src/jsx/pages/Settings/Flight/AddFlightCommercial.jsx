@@ -31,6 +31,7 @@ const AddFlightCommercial = () => {
     const navigate = useNavigate();
     const [fareTypes, setFareTypes] = useState([]);
     const [carriers, setCarriers] = useState([]);
+    const [groupType, setGroupType] = useState([]);
     const [submitting, setSubmitting] = useState(false);
 
     async function fetchData() {
@@ -76,6 +77,25 @@ const AddFlightCommercial = () => {
                 setCarriers(carriersData.data);
             } else {
                 Swal.fire({ icon: 'error', title: carriersData.message });
+            }
+
+            // Fetch fare types
+            const groupTypeApi = `${Server_URL}admin/user-group`;
+            let res = await fetch(groupTypeApi, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${dataLS.idToken}`
+                }
+            });
+            const groupTypeData = await res.json();
+            if(groupTypeData.message === 'Session Expired' || groupTypeData.message === 'Token Missing') {
+                return onLogout()
+            }
+            if (groupTypeData.responseCode === 2) {
+                console.log(groupTypeData.data)
+                setGroupType(groupTypeData.data);
+            } else {
+                Swal.fire({ icon: 'error', title: groupTypeData.message });
             }
 
         } catch (e) {
@@ -167,7 +187,7 @@ const AddFlightCommercial = () => {
     /* ---------------------------------------- */
 
     async function onSubmit(data) {
-setSubmitting(true)
+         setSubmitting(true)
         console.log(data)
         try {
             // Prepare data for submission
@@ -357,10 +377,9 @@ setSubmitting(true)
                                     })}
                             >
                                 <option value="">--Group Type--</option>
-                                <option value="0">Zero</option>
-                                {/*{groupTypes && groupTypes.map(x =>*/}
-                                {/*    <option key={x.GroupID} value={x.GroupID}>{x.GroupName}: {x.Description}</option>*/}
-                                {/*)}*/}
+                                {groupType && groupType.map(x =>
+                                    <option key={x.id} value={x.id}>{x.name}</option>
+                                )}
                             </select>
 
                             {errors?.group_type && <p className='text-danger'>{errors?.group_type?.message}</p>}

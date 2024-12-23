@@ -25,6 +25,8 @@
     "@n8tb1t/use-scroll-position": "^2.0.3",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "datatables.net": "^2.1.8",
+    "datatables.net-dt": "^2.1.8",
     "date-fns": "^4.1.0",
     "formik": "^2.4.5",
     "jspdf": "^2.5.2",

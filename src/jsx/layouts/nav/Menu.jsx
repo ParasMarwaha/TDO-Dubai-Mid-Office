@@ -196,7 +196,7 @@ export const MenuList = [
             },
             {
                 title: 'Cancellation Queue',
-                to: 'cancel-flights',
+                to: '/cancel-flights',
             },
         ],
     },
