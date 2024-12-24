@@ -1,5 +1,5 @@
-import React, { useState, useEffect,useMemo } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Server_URL, adminAuthToken,customStyles } from '../../../helpers/config.js';
 import PageTitle from "../../layouts/PageTitle.jsx";
@@ -61,98 +61,97 @@ function CancellationQueue() {
     }, []);
 
     // Define columns for the DataTable
-    const columns = useMemo(() => [
+    const columns = [
         {
             name: "",
-            cell: row => (
-                <Link to="/cancel-flights-details" state={{ row: row }}>
+            cell: (row) => (
+                <Link to="/cancellation-flight-details" state={{ row: row }}>
                     <i
-                        className="fa fa-eye icon-size text-primary"
-                        style={{cursor: 'pointer'}}  // Add cursor style to indicate it's clickable
-
+                        className="fa fa-eye text-info"
+                        style={{ cursor: 'pointer' }} // Add cursor style to indicate it's clickable
                     />
                 </Link>
             ),
-            width: '50px',
+            width: '40px', // Reduced width
         },
         {
-            name: "Booking Id",
+            name: <div>Booking <br />Id</div>,
             selector: row => row?.booking_id,
             sortable: true,
-            minWidth: '100px',
-            wrap:true
+            minWidth: '80px', // Compact width
+            wrap: true,
         },
         {
-            name: "Request Type",
+            name: <div>Request <br />Type</div>,
             selector: row => row?.request_type,
             sortable: true,
-            minWidth: '90px',
-            wrap: true
+            minWidth: '83px',
+            wrap: true,
         },
         {
-            name: "Requested By",
+            name: <div>Requested <br />By</div>,
             selector: row => row?.request_by,
             sortable: true,
-            minWidth: '140px',
-            wrap: true
+            minWidth: '100px',
+            wrap: true,
         },
         {
-            name: "Requested On",
+            name: <div>Requested <br />On</div>,
             selector: row => row?.request_on,
             sortable: true,
-            minWidth: '110px',
-            wrap: true
+            minWidth: '97px',
+            wrap: true,
         },
         {
-            name: "Cancellation Status",
+            name: <div>Cancellation <br />Status</div>,
             selector: row => row?.cancel_status,
             sortable: true,
-            minWidth: '100px',
-            wrap: true
+            minWidth: '110px',
+            wrap: true,
         },
         {
-            name: "Remarks",
+            name: <div>Remarks</div>,
             selector: row => row?.remarks,
             sortable: true,
-            minWidth: '130px',
-            wrap: true
+            minWidth: '85px',
+            wrap: true,
         },
         {
-            name: "Cancel Charge",
-            selector: row => row?.cancel_charge,
+            name: <div>Cancel <br />Charge</div>,
+            selector: row => row?.cancel_charges,
             sortable: true,
-            minWidth: '120px',
-            wrap: true
+            minWidth: '78px',
+            wrap: true,
         },
         {
-            name: "Service Charge",
+            name: <div>Service <br />Charge</div>,
             selector: row => row?.service_charge,
             sortable: true,
-            minWidth: '110px',
-            wrap: true
+            width: '77px',
+            wrap: true,
         },
         {
-            name: "VAT",
+            name: <div>VAT</div>,
             selector: row => row?.vat,
             sortable: true,
-            minWidth: '120px',
-            wrap: true
+            width: '60px',
+            wrap: true,
         },
         {
-            name: "Refund Amount",
+            name: <div>Refund <br />Amount</div>,
             selector: row => row?.refund_amount,
             sortable: true,
-            minWidth: '120px',
-            wrap: true
+            width: '80px',
+            wrap: true,
         },
         {
-            name: "Agent Remarks",
+            name: <div>Agent <br />Remarks</div>,
             selector: row => row?.agent_remarks,
             sortable: true,
-            minWidth: '120px',
-            wrap: true
+            width: '100px', // Increased to accommodate more text
+            wrap: true,
         },
-    ], []);
+    ];
 
     const filteredLogs = logs.filter(log => {
         const search = searchTerm.toLowerCase();
@@ -177,7 +176,7 @@ function CancellationQueue() {
 
             <div className="card mb-4">
                 <div className="card-body">
-                    <div className="table-responsive">
+                    <div className="">
                         <h2 className="text-center"><b>Cancellation Queue</b></h2>
                         <hr/>
 

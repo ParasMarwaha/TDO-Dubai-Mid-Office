@@ -186,9 +186,13 @@ export const MenuList = [
             //     title: 'Flight Stats',
             //     to: 'flights-collection',
             // },
+            // {
+            //     title: 'Confirmed Tickets',
+            //     to: 'booked-flights',
+            // },
             {
-                title: 'Confirmed Tickets',
-                to: 'booked-flights',
+                title: 'Search Bookings',
+                to: 'search-booked-flights',
             },
             {
                 title: 'Hold Tickets',

@@ -22,6 +22,8 @@ let FlightCancellationDetails = () => {
     const [grandTotal, setGrandTotal] = useState(0)
     const [isToggled, setIsToggled] = useState(false);
     let [bookingId, setBookingId] = useState(0)
+    let [cancelId, setCancelId] = useState(0)
+    let [requestType, setRequestType] = useState(0)
     let [showHidAgent, setShowHideAgent] = useState("");
     let [totalAmendmentCharge, setAmendmentCharge] = useState(0)
     const [clickedButton, setClickedButton] = React.useState(null);
@@ -39,14 +41,14 @@ let FlightCancellationDetails = () => {
         setClickedButton(buttonId);
     }
 
-    let fetchData = async () => {
+    let fetchData = async (id) => {
         const dataLS = localStorage.getItem(adminAuthToken);
         if (!dataLS) {
             throw new Error('No authentication token found.');
         }
         const parsedData = JSON.parse(dataLS);
         // console.log(location.state.row.cancel_id)
-        axios.get(Server_URL + "admin/flight-cancellation-details/" + location.state.row.cancel_id, {
+        axios.get(Server_URL + "admin/flight-cancellation-details/" + id, {
             headers: {
                 'Authorization': `Bearer ${parsedData.idToken}`, 'Content_Type': 'application-json'
             }
@@ -55,6 +57,7 @@ let FlightCancellationDetails = () => {
             console.log(res.data.data)
             let total_amount = 0;
             for (let x of res.data.data) {
+                console.log(x.base_fare)
                 let discounted_price = ((parseFloat(x.base_fare) +
                     parseFloat(x.markup_per_pax) +
                     parseFloat(x.passenger_additional_tax) +
@@ -65,12 +68,13 @@ let FlightCancellationDetails = () => {
                     parseFloat(x.yr_tax) +
                     parseFloat(x.k3_tax) - parseFloat(x.commission)
                 )).toFixed(2)
-                //console.log("Discounted Price---" + parseFloat(discounted_price))
+                console.log("Discounted Price---" + parseFloat(discounted_price))
                 total_amount += parseFloat(discounted_price);
             }
             //console.log("total amount---" + total_amount)
             total_amount = total_amount.toFixed(2)
             setGrandTotal(total_amount)
+            console.log(total_amount)
             setValue('totalAmount', total_amount)
             setValue('grandTotal', total_amount)
 
@@ -81,7 +85,6 @@ let FlightCancellationDetails = () => {
                 setCancelDetail(res.data.data)
                 //console.log(cancelDetail)
                 setIsCheckingStatus(res.data.data[0].cancel_status)
-                setBookingId(location.state.row.cancel_id)
                 setShowHideAgent(res.data.data[0].show_to_agent)
             }
         })
@@ -90,7 +93,11 @@ let FlightCancellationDetails = () => {
     const cancellationCharges = watch(cancelDetail.map(item => `finalAmount${item.cancel_detail_id}`));
     // console.log()
     useEffect(() => {
-        fetchData().then()
+        fetchData(location.state.row.cancel_id).then()
+        let rowData = location.state.row
+        setCancelId(rowData.cancel_id)
+        setBookingId(rowData.booking_id)
+        setRequestType(rowData.request_type)
     }, []);
 
 
@@ -132,7 +139,7 @@ let FlightCancellationDetails = () => {
         return `${day}-${month}-${year}`;
     }
 
-    console.log(errors)
+   // console.log(errors)
 
     function onSubmitForm(data) {
         console.log("data===");
@@ -172,7 +179,7 @@ let FlightCancellationDetails = () => {
                 combined.gst = data.gst;
                 combined.refundAmount = data.grandTotal;
                 combined.remarks = data.remarks;
-                combined.bookingId = location.state.row.booking_id
+                combined.bookingId = bookingId
             }
 
             result.push(combined);
@@ -188,8 +195,8 @@ let FlightCancellationDetails = () => {
         const parsedData = JSON.parse(dataLS);
         const endpoint =
             clickedButton === 'issueCR'
-                ? 'http://192.168.29.219:4000/' + "admin/flight-cancellation-action"
-                : 'http://192.168.29.219:4000/' + "admin/flight-cancellation-cancel";
+                ? Server_URL + "admin/flight-cancellation-action"
+                : Server_URL + "admin/flight-cancellation-cancel";
 
         axios.post(endpoint, result, {
             headers: {
@@ -301,7 +308,7 @@ let FlightCancellationDetails = () => {
             throw new Error('No authentication token found.');
         }
         const parsedData = JSON.parse(dataLS);
-        axios.post('http://192.168.29.219:4000/' + "admin/updateFlightShowAgentStatus", formData, {
+        axios.post(Server_URL + "admin/updateFlightShowAgentStatus", formData, {
             headers: {
                 'Authorization': `Bearer ${parsedData.idToken}`,
                 'Content_Type': 'application-json'
@@ -362,173 +369,197 @@ let FlightCancellationDetails = () => {
     // }
 
     return (
-
         <div>
-            <PageTitle motherMenu="Flights" activeMenu="Cancellation Queue Details" pageContent="Cancellation Queue Details" />
+            <div>
+                <PageTitle motherMenu="Flights" activeMenu="Cancellation Queue Details"
+                           pageContent="Cancellation Queue Details"/>
 
-            {loader ? <div>
-                <span className="spinner-border text-primary"></span>
-            </div> :
-            <div className="table-responsive">
-                <table className="table fs-12">
-                    <thead>
-                    <tr className='fs-12'>
-                        <th colSpan={"10"} className={"text-center fs-4"}>Basic Info.</th>
-                    </tr>
-                    <tr className="text-center fs-12">
-                        <th style={{whiteSpace: "pre-wrap"}}>Passenger Info.</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Sector</th>
-                        <th>Journey</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Airline Code</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Ticket No.</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Pnr No.</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Bill No. & Date</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Travel Date</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Fare Type</th>
-                        <th style={{whiteSpace: "pre-wrap"}}>Flight Number</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        cancelDetail.map((item, ind) => (
-                            <tr key={ind} className={"text-center"}>
-                                <td>
-                                    {item.salutation + " " + item.passenger_name} {" "}
-                                    ({item.pax_type === "A" ? "Adult" : item.pax_type === "C" ? "Child" : "Infant"})
-                                </td>
-                                <td>{item.sector}</td>
-                                <td>{item.journey === "D" ? "Domestic" : "International"}</td>
-                                <td>{item.airline_code}</td>
-                                <td>{item.ticket_no}</td>
-                                <td>{item.airline_pnr}</td>
-                                <td> {formatDate(item.bill_date)} ({item.bill_no})</td>
-                                <td>{item.travel_date.split("T")[0]}</td>
-                                <td>{item.fare_type}</td>
-                                <td>{item.flight_number}</td>
+                {loader ? <div>
+                        <span className="spinner-border text-primary"></span>
+                    </div> :
+                    <div className="table-responsive">
+                        <table className="table fs-12">
+                            <thead>
+                            <tr className='fs-12'>
+                                <th colSpan={"10"} className={"text-center fs-4"}>Basic Info.</th>
                             </tr>
-                        ))
-                    }
-                    </tbody>
-                </table>
+                            <tr className="text-center fs-12">
+                                <th style={{whiteSpace: "pre-wrap"}}>Passenger Info.</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Sector</th>
+                                <th>Journey</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Airline Code</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Ticket No.</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Pnr No.</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Bill No. & Date</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Travel Date</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Fare Type</th>
+                                <th style={{whiteSpace: "pre-wrap"}}>Flight Number</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                cancelDetail.map((item, ind) => (
+                                    <tr key={ind} className={"text-center"}>
+                                        <td>
+                                            {item.salutation + " " + item.passenger_name} {" "}
+                                            ({item.pax_type === "A" ? "Adult" : item.pax_type === "C" ? "Child" : "Infant"})
+                                        </td>
+                                        <td>{item.sector}</td>
+                                        <td>{item.journey === "D" ? "Domestic" : "International"}</td>
+                                        <td>{item.airline_code}</td>
+                                        <td>{item.ticket_no}</td>
+                                        <td>{item.airline_pnr}</td>
+                                        <td> {formatDate(item.bill_date)} ({item.bill_no})</td>
+                                        <td>{item.travel_date.split("T")[0]}</td>
+                                        <td>{item.fare_type}</td>
+                                        <td>{item.flight_number}</td>
+                                    </tr>
+                                ))
+                            }
+                            </tbody>
+                        </table>
 
-                <form onSubmit={handleSubmit(onSubmitForm)}>
-                    <table className={"table table-sm"}>
-                        <thead>
-                        <tr>
-                            <th colSpan={"11"} className={"text-center fs-4"}>Fare BreakUp</th>
-                        </tr>
-                        <tr className={"text-center"}>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Pax Name</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Markup</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Commission</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>TDS</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Base Fare <br/> (AED)</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Commission</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Discounted Price</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Taxes and Other Charges</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Cancellation Charges</th>
-                            <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Final Amount</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {cancelDetail.map((item, index) => (
-                            <>
-                                <tr key={index} className="text-center fs-12">
-                                    <td> {item.salutation + " " + item.passenger_name}</td>
-                                    <td>AED {item.markup_per_pax == null ? "0" : item.markup_per_pax}</td>
-                                    <td>AED {item.commission == null ? "0" : item.commission}</td>
-                                    <td>AED {item.total_ssr_amount == null ? "0" : item.total_ssr_amount}</td>
-                                    <td>
-                                        <CInputGroup className="flex-nowrap">
-                                            {/*<CInputGroupText id="addon-wrapping">AED</CInputGroupText>*/}
-                                            <input className="form-control"
-                                                   type="number"
-                                                   id={"base_fare" + item.cancel_detail_id}
-                                                   placeholder="0"
-                                                   readOnly
-                                                   {...register('base_fare' + item.cancel_detail_id)}
-                                                   defaultValue={parseFloat(item.base_fare)}
-                                            />
-                                        </CInputGroup>
-                                    </td>
-                                    <td>AED {item.commission == null ? "0" : item.commission}</td>
-                                    <td>
-                                        <CInputGroup className="flex-nowrap">
-                                            {/*<CInputGroupText id="addon-wrapping">AED</CInputGroupText>*/}
-                                            <input className="form-control"
-                                                   type="number"
-                                                   id={"discountedPrice" + item.cancel_detail_id}
-                                                   placeholder="0"
-                                                   readOnly
-                                                   {...register('discountedPrice' + item.cancel_detail_id, {required: true})}
-                                                   defaultValue={parseFloat(item.base_fare) - parseFloat(item.commission)}
-                                            />
-                                        </CInputGroup>
+                        <form onSubmit={handleSubmit(onSubmitForm)}>
+                            <table className={"table table-sm"}>
+                                <thead>
+                                <tr>
+                                    <th colSpan={"11"} className={"text-center fs-4"}>Fare BreakUp</th>
+                                </tr>
+                                <tr className={"text-center"}>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Pax Name</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Markup</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Commission</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>TDS</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Base Fare <br/> (AED)</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Commission</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Discounted Price</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Taxes and Other Charges</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Cancellation Charges</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Final Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {cancelDetail.map((item, index) => (
+                                    <>
+                                        <tr key={index} className="text-center fs-12">
+                                            <td> {item.salutation + " " + item.passenger_name}</td>
+                                            <td>AED {item.markup_per_pax == null ? "0" : item.markup_per_pax}</td>
+                                            <td>AED {item.commission == null ? "0" : item.commission}</td>
+                                            <td>AED {item.total_ssr_amount == null ? "0" : item.total_ssr_amount}</td>
+                                            <td>
+                                                <CInputGroup className="flex-nowrap">
+                                                    {/*<CInputGroupText id="addon-wrapping">AED</CInputGroupText>*/}
+                                                    <input className="form-control"
+                                                           type="number"
+                                                           id={"base_fare" + item.cancel_detail_id}
+                                                           placeholder="0"
+                                                           readOnly
+                                                           {...register('base_fare' + item.cancel_detail_id)}
+                                                           defaultValue={parseFloat(item.base_fare)}
+                                                    />
+                                                </CInputGroup>
+                                            </td>
+                                            <td>AED {item.commission == null ? "0" : item.commission}</td>
+                                            <td>
+                                                <CInputGroup className="flex-nowrap">
+                                                    {/*<CInputGroupText id="addon-wrapping">AED</CInputGroupText>*/}
+                                                    <input className="form-control"
+                                                           type="number"
+                                                           id={"discountedPrice" + item.cancel_detail_id}
+                                                           placeholder="0"
+                                                           readOnly
+                                                           {...register('discountedPrice' + item.cancel_detail_id, {required: true})}
+                                                           defaultValue={parseFloat(item.base_fare) - parseFloat(item.commission)}
+                                                    />
+                                                </CInputGroup>
 
 
-                                        <CFormInput
-                                            type="hidden"
-                                            id={"cancel_id"}
-                                            placeholder="0"
-                                            readOnly
-                                            {...register('cancel_id', {required: true})}
-                                            // defaultValue={item.cancel_id[0]}
-                                            defaultValue={location.state.row.cancel_id}
-                                        />
-                                        <CFormInput
-                                            type="hidden"
-                                            id={"request_type"}
-                                            placeholder="0"
-                                            {...register('request_type', {required: true})}
-                                            // defaultValue={item.cancel_id[0]}
-                                            defaultValue={location.state.row.request_type}
-                                        />
-                                    </td>
-
-                                    <td>
-                                        <strong>AED</strong>
-                                        {(parseFloat(item.markup_per_pax ?? 0) +
-                                            parseFloat(item.passenger_additional_tax ?? 0) +
-                                            parseFloat(item.passenger_other_charges ?? 0) + parseFloat(item.total_ssr_amount ?? 0)
-                                            + parseFloat(item.passenger_service_fee ?? 0) + parseFloat(item.yq_tax ?? 0) + parseFloat(item.yr_tax ?? 0) + parseFloat(item.k3_tax ?? 0)).toFixed(2)}
-
-                                    </td>
-                                    <td>
-                                        {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected" || item.cancel_status_code === 2) ? (
-                                            <>AED {item.cancellation_charge}</>
-                                        ) : (
-                                            <CInputGroup className="flex-nowrap">
-                                                <CInputGroupText id="addon-wrapping">AED</CInputGroupText>
                                                 <CFormInput
-                                                    type="text"
-                                                    onKeyUp={(e) => calcFinalAmt(e, item.cancel_detail_id)}
-                                                    {...register('cancelCharge' + item.cancel_detail_id, {
-                                                        required: true,
-                                                        pattern: {
-                                                            value: /^[0-9]+$/,
-                                                            message: 'Only numbers are allowed',
-                                                        },
-                                                    })}
-                                                    defaultValue="0"
-                                                    style={{
-                                                        MozAppearance: 'textfield',
-                                                        WebkitAppearance: 'none',
-                                                        appearance: 'none',
-                                                    }}
-                                                    id={"cancelCharge" + item.cancel_detail_id}
-                                                />
-                                            </CInputGroup>
-                                        )}
-                                    </td>
-                                    <td>
-                                        {(isCheckingStatus !== "Cancelled" || isCheckingStatus !== "Rejected") ? (
-                                            <CInputGroup className="flex-nowrap">
-                                                <CInputGroupText>AED</CInputGroupText>
-                                                <CFormInput
-                                                    type="number"
+                                                    type="hidden"
+                                                    id={"cancel_id"}
                                                     placeholder="0"
                                                     readOnly
-                                                    {...register('finalAmount' + item.cancel_detail_id)}
+                                                    {...register('cancel_id', {required: true})}
+                                                    // defaultValue={item.cancel_id[0]}
+                                                    defaultValue={cancelId}
+                                                />
+                                                <CFormInput
+                                                    type="hidden"
+                                                    id={"request_type"}
+                                                    placeholder="0"
+                                                    {...register('request_type', {required: true})}
+                                                    // defaultValue={item.cancel_id[0]}
+                                                    defaultValue={requestType}
+                                                />
+                                            </td>
+
+                                            <td>
+                                                <strong>AED</strong>
+                                                {(parseFloat(item.markup_per_pax ?? 0) +
+                                                    parseFloat(item.passenger_additional_tax ?? 0) +
+                                                    parseFloat(item.passenger_other_charges ?? 0) + parseFloat(item.total_ssr_amount ?? 0)
+                                                    + parseFloat(item.passenger_service_fee ?? 0) + parseFloat(item.yq_tax ?? 0) + parseFloat(item.yr_tax ?? 0) + parseFloat(item.k3_tax ?? 0)).toFixed(2)}
+
+                                            </td>
+                                            <td>
+                                                {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected" || item.cancel_status_code === 2) ? (
+                                                    <>AED {item.cancellation_charge}</>
+                                                ) : (
+                                                    <CInputGroup className="flex-nowrap">
+                                                        <CInputGroupText id="addon-wrapping">AED</CInputGroupText>
+                                                        <CFormInput
+                                                            type="text"
+                                                            onKeyUp={(e) => calcFinalAmt(e, item.cancel_detail_id)}
+                                                            {...register('cancelCharge' + item.cancel_detail_id, {
+                                                                required: true,
+                                                                pattern: {
+                                                                    value: /^[0-9]+$/,
+                                                                    message: 'Only numbers are allowed',
+                                                                },
+                                                            })}
+                                                            defaultValue="0"
+                                                            style={{
+                                                                MozAppearance: 'textfield',
+                                                                WebkitAppearance: 'none',
+                                                                appearance: 'none',
+                                                            }}
+                                                            id={"cancelCharge" + item.cancel_detail_id}
+                                                        />
+                                                    </CInputGroup>
+                                                )}
+                                            </td>
+                                            <td>
+                                                {(isCheckingStatus !== "Cancelled" || isCheckingStatus !== "Rejected") ? (
+                                                    <CInputGroup className="flex-nowrap">
+                                                        <CInputGroupText>AED</CInputGroupText>
+                                                        <CFormInput
+                                                            type="number"
+                                                            placeholder="0"
+                                                            readOnly
+                                                            {...register('finalAmount' + item.cancel_detail_id)}
+                                                            defaultValue={
+                                                                (parseFloat(item.base_fare ?? 0) + parseFloat(item.markup_per_pax ?? 0) +
+                                                                    parseFloat(item.passenger_additional_tax ?? 0) +
+                                                                    parseFloat(item.passenger_other_charges ?? 0)
+                                                                    + parseFloat(item.passenger_service_fee ?? 0) +
+                                                                    parseFloat(item.yq_tax ?? 0) +
+                                                                    parseFloat(item.k3_tax ?? 0) + parseFloat(item.total_ssr_amount ?? 0) +
+                                                                    parseFloat(item.yr_tax ?? 0)).toFixed(2) -
+                                                                (item.commission ? parseFloat(item.commission) : 0)
+                                                            }
+                                                        />
+                                                    </CInputGroup>
+                                                ) : (
+                                                    <p>
+                                                        AED{' '}
+                                                        {(parseFloat(item.refund_amount)).toFixed(2)}
+                                                    </p>
+                                                )}
+                                                <CFormInput
+                                                    type="hidden"
+                                                    placeholder="0"
+                                                    readOnly
+                                                    {...register('newPrice' + item.cancel_detail_id)}
                                                     defaultValue={
                                                         (parseFloat(item.base_fare ?? 0) + parseFloat(item.markup_per_pax ?? 0) +
                                                             parseFloat(item.passenger_additional_tax ?? 0) +
@@ -540,207 +571,189 @@ let FlightCancellationDetails = () => {
                                                         (item.commission ? parseFloat(item.commission) : 0)
                                                     }
                                                 />
-                                            </CInputGroup>
-                                        ) : (
-                                            <p>
-                                                AED{' '}
-                                                {(parseFloat(item.refund_amount)).toFixed(2)}
-                                            </p>
-                                        )}
-                                        <CFormInput
-                                            type="hidden"
-                                            placeholder="0"
-                                            readOnly
-                                            {...register('newPrice' + item.cancel_detail_id)}
-                                            defaultValue={
-                                                (parseFloat(item.base_fare ?? 0) + parseFloat(item.markup_per_pax ?? 0) +
-                                                    parseFloat(item.passenger_additional_tax ?? 0) +
-                                                    parseFloat(item.passenger_other_charges ?? 0)
-                                                    + parseFloat(item.passenger_service_fee ?? 0) +
-                                                    parseFloat(item.yq_tax ?? 0) +
-                                                    parseFloat(item.k3_tax ?? 0) + parseFloat(item.total_ssr_amount ?? 0) +
-                                                    parseFloat(item.yr_tax ?? 0)).toFixed(2) -
-                                                (item.commission ? parseFloat(item.commission) : 0)
-                                            }
-                                        />
+                                            </td>
+                                        </tr>
+
+                                    </>
+                                ))}
+
+                                {/*-------------------------------------------------------------------------------------*/}
+                                {/* Total Amount */}
+                                <tr>
+                                    <td colSpan={"8"} className={"text-end pt-3"}>Total Amount:</td>
+                                    <td colSpan={"2"} className={"text-end"}>
+                                        {(isCheckingStatus !== "Cancelled" || isCheckingStatus !== "Rejected") ?
+                                            <CInputGroup className="flex-nowrap">
+                                                <CInputGroupText>AED</CInputGroupText>
+                                                <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
+                                                            {...register('totalAmount')} readOnly
+                                                            id={"totalAmount"} aria-describedby="addon-wrapping">
+                                                </CFormInput>
+                                            </CInputGroup> :
+                                            <p>AED {grandTotal - totalAmendmentCharge}</p>}
                                     </td>
                                 </tr>
 
-                            </>
-                        ))}
+                                <tr>
+                                    <td colSpan={"8"} className={"text-end pt-3"}>Service Charge:</td>
+                                    <td colSpan={"2"} className={"text-end"}>
+                                        {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ?
+                                            <p>AED {cancelDetail[0].service_charge}</p>
 
-                        {/*-------------------------------------------------------------------------------------*/}
-                        {/* Total Amount */}
-                        <tr>
-                            <td colSpan={"8"} className={"text-end pt-3"}>Total Amount:</td>
-                            <td colSpan={"2"} className={"text-end"}>
-                                {(isCheckingStatus !== "Cancelled" || isCheckingStatus !== "Rejected") ?
-                                    <CInputGroup className="flex-nowrap">
-                                        <CInputGroupText>AED</CInputGroupText>
-                                        <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
-                                                    {...register('totalAmount')} readOnly
-                                                    id={"totalAmount"} aria-describedby="addon-wrapping">
-                                        </CFormInput>
-                                    </CInputGroup> :
-                                    <p>AED {grandTotal - totalAmendmentCharge}</p>}
-                            </td>
-                        </tr>
+                                            : <CInputGroup className="flex-nowrap">
+                                                <CInputGroupText>AED</CInputGroupText>
+                                                <CFormInput type={"number"} aria-label="Final Amount"
+                                                            {...register('serviceCharge', {
+                                                                required: true, pattern: {
+                                                                    value: /^[0-9][0-9]*$/,
+                                                                    message: 'Only numbers are allowed'
+                                                                }
+                                                            })} defaultValue={"0"}
+                                                            onKeyUp={(e) => addServiceCharge(e)}
 
-                        <tr>
-                            <td colSpan={"8"} className={"text-end pt-3"}>Service Charge:</td>
-                            <td colSpan={"2"} className={"text-end"}>
-                                {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ?
-                                    <p>AED {cancelDetail[0].service_charge}</p>
+                                                            id={"serviceCharge"} aria-describedby="addon-wrapping"
+                                                ></CFormInput>
+                                            </CInputGroup>
+                                        }
 
-                                    : <CInputGroup className="flex-nowrap">
-                                        <CInputGroupText>AED</CInputGroupText>
-                                        <CFormInput type={"number"} aria-label="Final Amount"
-                                                    {...register('serviceCharge', {
-                                                        required: true, pattern: {
-                                                            value: /^[0-9][0-9]*$/,
-                                                            message: 'Only numbers are allowed'
-                                                        }
-                                                    })} defaultValue={"0"}
-                                                    onKeyUp={(e) => addServiceCharge(e)}
+                                    </td>
+                                </tr>
 
-                                                    id={"serviceCharge"} aria-describedby="addon-wrapping"
-                                        ></CFormInput>
-                                    </CInputGroup>
-                                }
+                                <tr>
+                                    <td colSpan={"8"} className={"text-end pt-3"}>VAT @ 5%:</td>
+                                    <td colSpan={"2"} className={"text-end"}>
+                                        {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ?
 
-                            </td>
-                        </tr>
+                                            <p>AED {cancelDetail[0].vat}</p>
+                                            :
+                                            <CInputGroup className="flex-nowrap">
+                                                <CInputGroupText>AED</CInputGroupText>
+                                                <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
+                                                            {...register('gst')} readOnly
+                                                            id={"gst"} aria-describedby="addon-wrapping"
+                                                            defaultValue={0}></CFormInput>
+                                            </CInputGroup>
+                                        }
 
-                        <tr>
-                            <td colSpan={"8"} className={"text-end pt-3"}>VAT @ 5%:</td>
-                            <td colSpan={"2"} className={"text-end"}>
-                                {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={"8"} className={"text-end pt-3"}>Refund Amount:</td>
+                                    <td colSpan={"2"} className={"text-end"}>
+                                        {isCheckingStatus !== "Cancelled" ?
+                                            <CInputGroup className="flex-nowrap">
+                                                <CInputGroupText>AED</CInputGroupText>
+                                                <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
+                                                            {...register('grandTotal')} readOnly
+                                                            id={"grandTotal"} aria-describedby="addon-wrapping"
+                                                            defaultValue={0}></CFormInput>
+                                            </CInputGroup> :
+                                            <>{parseFloat(cancelDetail[0].finalRefundAmt).toFixed(2)}</>
+                                        }
 
-                                    <p>AED {cancelDetail[0].vat}</p>
-                                    :
-                                    <CInputGroup className="flex-nowrap">
-                                        <CInputGroupText>AED</CInputGroupText>
-                                        <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
-                                                    {...register('gst')} readOnly
-                                                    id={"gst"} aria-describedby="addon-wrapping"
-                                                    defaultValue={0}></CFormInput>
-                                    </CInputGroup>
-                                }
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan={"8"} className={"text-end pt-3"}>Refund Amount:</td>
-                            <td colSpan={"2"} className={"text-end"}>
-                                {isCheckingStatus !== "Cancelled" ?
-                                    <CInputGroup className="flex-nowrap">
-                                        <CInputGroupText>AED</CInputGroupText>
-                                        <CFormInput type={"number"} placeholder="0" aria-label="Final Amount"
-                                                    {...register('grandTotal')} readOnly
-                                                    id={"grandTotal"} aria-describedby="addon-wrapping"
-                                                    defaultValue={0}></CFormInput>
-                                    </CInputGroup> :
-                                    <>{parseFloat(cancelDetail[0].finalRefundAmt).toFixed(2)}</>
-                                }
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan={"8"} className={"text-end pt-3"}>Remarks:</td>
-                            <td colSpan={"2"} className={"text-end"}>
-                                {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ? (
-                                    <h6 className={"text-dark"}>{cancelDetail[0].remarks}</h6>
-                                ) : (
-                                    <div>
-                                        <CInputGroup className="flex-nowrap">
-                                            <CFormTextarea
-                                                placeholder="Enter your remarks"
-                                                aria-label="Remarks"
-                                                {...register('remarks', {required: 'This field is required'})}
-                                                id="remarks"
-                                                aria-describedby="addon-wrapping"
-                                            ></CFormTextarea>
-                                        </CInputGroup>
-                                        {/* Display validation error */}
-                                        {errors.remarks && (
-                                            <p className="text-danger mt-1" style={{fontSize: '0.875rem'}}>
-                                                {errors.remarks.message}
-                                            </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={"8"} className={"text-end pt-3"}>Remarks:</td>
+                                    <td colSpan={"2"} className={"text-end"}>
+                                        {(isCheckingStatus === "Cancelled" || isCheckingStatus === "Rejected") ? (
+                                            <h6 className={"text-dark"}>{cancelDetail[0].remarks}</h6>
+                                        ) : (
+                                            <div>
+                                                <CInputGroup className="flex-nowrap">
+                                                    <CFormTextarea
+                                                        placeholder="Enter your remarks"
+                                                        aria-label="Remarks"
+                                                        {...register('remarks', {required: 'This field is required'})}
+                                                        id="remarks"
+                                                        aria-describedby="addon-wrapping"
+                                                    ></CFormTextarea>
+                                                </CInputGroup>
+                                                {/* Display validation error */}
+                                                {errors.remarks && (
+                                                    <p className="text-danger mt-1" style={{fontSize: '0.875rem'}}>
+                                                        {errors.remarks.message}
+                                                    </p>
+                                                )}
+                                            </div>
                                         )}
-                                    </div>
-                                )}
-                            </td>
-                        </tr>
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td colSpan={"6"}></td>
-                            <td colSpan={"4"} className={"text-end"}>
-                                {
-                                    isCheckingStatus === "Cancelled" ? (
-                                            <div className="d-flex align-items-center justify-content-end">
-                                                <Link target={"_blank"}
-                                                      to={`http://tdo.webyatra.in/CtrlReporting/InvoiceReports?PNRNO=${wyCanInvNo}&CN=Y&BillTyp=AIR&Brnid=&ReportType=CNK&Typeofreport=undefined&DatewiseStartdate=&DatewiseEnddate=&Difformat=undefined&Pstartdate=&Pendate=&Partycode=&StartInvno=undefined&EndInvno=undefined&Refund=false&Userid=SUP&EmailOpt=false&EmailId=&Maindb=dFviql6SMgxLGyjtG+maP1f3VyY3Q+yPmHJV/COkf08=&Currdb=dFviql6SMgxLGyjtG+maP1f3VyY3Q+yPmHJV/COkf08=&User=5b17FYTyIWKgWzEFeIG9mg==&PWD=zd4y5Vh4jQttRBFvF3ddx3UORdIfAiNLoPH8OphzTEo=&IP=cT+Cv6OTTj+7n77wBCqGSWhj5GLKM9yVfOrIIc/Rz6vSdjyLNYeLR5idxHg92T8L&InvFormat=InvPDF&OrderBy=Billno&ClubMischg=CLN&Name=&Address=&State=&City=&Walkin=false&PdfAttach=false&MergePDF=false&RmPrint=true&Barcode=true&RptLang=en&PrintDisc=true`}>
-                                                    <CButton type={"button"} download target={"_blank"} style={{
-                                                        backgroundColor: 'red',
-                                                        color: 'white',
-                                                        border: 'black',
-                                                    }}><i className={"fa fa-download"}></i> Download</CButton>
-                                                </Link>
-                                                <Form.Group className=" ms-2 me-2 d-flex justify-content-start">
-                                                    {showHidAgent === "show" ?
-                                                        <Form.Check
-                                                            onClick={() => showHideAgent(bookingId, showHidAgent !== "show" ? "hide" : "show")}
-                                                            type="switch"
-                                                            id="custom-switch"
-                                                            onChange={() => showHideAgent(bookingId, showHidAgent === "show" ? "hide" : "show")}
-                                                            checked={true}
-                                                            label="Show Credit Note to Agent"
-                                                        /> :
-                                                        <Form.Check
-                                                            onClick={() => showHideAgent(bookingId, showHidAgent !== "show" ? "show" : "hide")}
-                                                            type="switch"
-                                                            id="custom-switch"
-                                                            // onChange={() => showHideAgent(bookingId, showHidAgent === "show" ? "hide" : "show")}
+                                <tr>
+                                    <td colSpan={"6"}></td>
+                                    <td colSpan={"4"} className={"text-end"}>
+                                        {
+                                            isCheckingStatus === "Cancelled" ? (
+                                                    <div className="d-flex align-items-center justify-content-end">
+                                                        <Link target={"_blank"}
+                                                              to={`http://tdo.webyatra.in/CtrlReporting/InvoiceReports?PNRNO=${wyCanInvNo}&CN=Y&BillTyp=AIR&Brnid=&ReportType=CNK&Typeofreport=undefined&DatewiseStartdate=&DatewiseEnddate=&Difformat=undefined&Pstartdate=&Pendate=&Partycode=&StartInvno=undefined&EndInvno=undefined&Refund=false&Userid=SUP&EmailOpt=false&EmailId=&Maindb=dFviql6SMgxLGyjtG+maP1f3VyY3Q+yPmHJV/COkf08=&Currdb=dFviql6SMgxLGyjtG+maP1f3VyY3Q+yPmHJV/COkf08=&User=5b17FYTyIWKgWzEFeIG9mg==&PWD=zd4y5Vh4jQttRBFvF3ddx3UORdIfAiNLoPH8OphzTEo=&IP=cT+Cv6OTTj+7n77wBCqGSWhj5GLKM9yVfOrIIc/Rz6vSdjyLNYeLR5idxHg92T8L&InvFormat=InvPDF&OrderBy=Billno&ClubMischg=CLN&Name=&Address=&State=&City=&Walkin=false&PdfAttach=false&MergePDF=false&RmPrint=true&Barcode=true&RptLang=en&PrintDisc=true`}>
+                                                            <CButton type={"button"} download target={"_blank"} style={{
+                                                                backgroundColor: 'red',
+                                                                color: 'white',
+                                                                border: 'black',
+                                                            }}><i className={"fa fa-download"}></i> Download</CButton>
+                                                        </Link>
+                                                        <Form.Group className=" ms-2 me-2 d-flex justify-content-start">
+                                                            {showHidAgent === "show" ?
+                                                                <Form.Check
+                                                                    onClick={() => showHideAgent(bookingId, showHidAgent !== "show" ? "hide" : "show")}
+                                                                    type="switch"
+                                                                    id="custom-switch"
+                                                                    onChange={() => showHideAgent(bookingId, showHidAgent === "show" ? "hide" : "show")}
+                                                                    checked={true}
+                                                                    label="Show Credit Note to Agent"
+                                                                /> :
+                                                                <Form.Check
+                                                                    onClick={() => showHideAgent(bookingId, showHidAgent !== "show" ? "show" : "hide")}
+                                                                    type="switch"
+                                                                    id="custom-switch"
+                                                                    // onChange={() => showHideAgent(bookingId, showHidAgent === "show" ? "hide" : "show")}
 
-                                                            label="Show/Hide Credit Note to Agent"
-                                                        />
-                                                    }
-                                                </Form.Group>
+                                                                    label="Show/Hide Credit Note to Agent"
+                                                                />
+                                                            }
+                                                        </Form.Group>
 
-                                                {showHidAgent === "show" ?
-                                                    <button type={"button"}
-                                                            id={"sendEmail"}
-                                                            onClick={() => sendEmailAgent(bookingId)}
-                                                            className={"btn btn-success text-white"}>
-                                                        Email Credit Note
-                                                    </button>
-                                                    : <></>}
-                                            </div>)
-                                        : isCheckingStatus === "Rejected" ? (
-                                                <h4 className={"text-danger"}>This cancellation has been Rejected</h4>) :
-                                            <>
-                                                <CButton type={"submit"} id={"cancelCR"} style={{
-                                                    backgroundColor: 'red',
-                                                    color: 'white',
-                                                    border: 'black',
-                                                }} onClick={() => handleButtonClick('cancelCR')}>Cancel Request</CButton>
-                                                {" "}
-                                                <CButton type={"submit"} id={"issueCR"} style={{
-                                                    backgroundColor: 'green',
-                                                    color: 'white',
-                                                    border: 'black',
-                                                }} onClick={() => handleButtonClick('issueCR')}>Issue Credit Note</CButton>
+                                                        {showHidAgent === "show" ?
+                                                            <button type={"button"}
+                                                                    id={"sendEmail"}
+                                                                    onClick={() => sendEmailAgent(bookingId)}
+                                                                    className={"btn btn-success text-white"}>
+                                                                Email Credit Note
+                                                            </button>
+                                                            : <></>}
+                                                    </div>)
+                                                : isCheckingStatus === "Rejected" ? (
+                                                        <h4 className={"text-danger"}>This cancellation has been
+                                                            Rejected</h4>) :
+                                                    <>
+                                                        <CButton type={"submit"} id={"cancelCR"} style={{
+                                                            backgroundColor: 'red',
+                                                            color: 'white',
+                                                            border: 'black',
+                                                        }} onClick={() => handleButtonClick('cancelCR')}>Cancel
+                                                            Request</CButton>
+                                                        {" "}
+                                                        <CButton type={"submit"} id={"issueCR"} style={{
+                                                            backgroundColor: 'green',
+                                                            color: 'white',
+                                                            border: 'black',
+                                                        }} onClick={() => handleButtonClick('issueCR')}>Issue Credit
+                                                            Note</CButton>
 
-                                            </>
-                                }
+                                                    </>
+                                        }
 
-                            </td>
-                        </tr>
+                                    </td>
+                                </tr>
 
-                        </tbody>
-                    </table>
-                </form>
-            </div>}
-        </div>)
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>}
+            </div>
+        </div>
+    )
 }
 export default FlightCancellationDetails;

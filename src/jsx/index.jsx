@@ -170,6 +170,8 @@ import AddFlightCommercial from "./pages/Settings/Flight/AddFlightCommercial.jsx
 import EditFlightCommercial from "./pages/Settings/Flight/EditFlightCommercial.jsx";
 import CancellationQueue from "./pages/Flights/CancellationQueue.jsx";
 import FlightCancellationDetails from "./pages/Flights/FlightCancellationDetails.jsx";
+import SearchBookings from "./pages/Flights/SearchBookings.jsx";
+import SearchBookingDetails from "./pages/Flights/SearchBookingDetails.jsx";
 
 const Markup = () => {
     const allroutes = [
@@ -208,9 +210,11 @@ const Markup = () => {
 
         ///Flights
         {url: "booked-flights", component: <BookedFlights/>},
+        {url: "search-booked-flights", component: <SearchBookings/>},
+        {url: "/search-booked-flight-details", component: <SearchBookingDetails/>},
         {url: "hold-flights", component: <HoldFlights/>},
         {url: "/cancel-flights", component: <CancellationQueue/>},
-        {url: "/cancel-flights-details", component: <FlightCancellationDetails/>},
+        {url: "/cancellation-flight-details", component: <FlightCancellationDetails/>},
 
 
         //// Control Panel
