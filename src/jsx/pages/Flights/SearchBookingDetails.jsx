@@ -11,6 +11,7 @@ import EditPax from "../../components/Forms/EditPax.jsx";
 import EditSegment from "../../components/Forms/EditSegment.jsx";
 import EditSector from "../../components/Forms/EditSector.jsx";
 import EditSsr from "../../components/Forms/EditSsr.jsx";
+import PageTitle from "../../layouts/PageTitle.jsx";
 
 
 let SearchBookingDetails = () => {
@@ -133,7 +134,9 @@ let SearchBookingDetails = () => {
     }
 
     return (
-        <>
+        <div>
+            <PageTitle motherMenu="" activeMenu="Flights/Search Booking Details" pageContent="Flights/Search Booking Details" />
+
             {/*<div className={"container-fluid"}>*/}
             {
                 loader ?
@@ -153,13 +156,9 @@ let SearchBookingDetails = () => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <div className={"btn-group d-flex flex-wrap gap-2"}>
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-outline-primary"
-                                                onClick={() => window.open(Server_URL+`flights/viewTicket/${booking.booking_id}`, '_blank')}
-                                            >
-                                                Print Ticket
-                                            </button>
+                                            <Link to={"/print-ticket"} state={{ id: booking.booking_id }}>
+                                                <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Print Ticket</button>
+                                            </Link>
                                             <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Email
                                                 Ticket
                                             </button>
@@ -174,38 +173,39 @@ let SearchBookingDetails = () => {
 
                         {
                             agent.map((item, index) => (
-                                <CCard key={index} className={"table"}>
-                                    <CCardHeader>
-
-                                        <h3>Agency Details</h3>
-
+                                <CCard key={index} className="mb-3">
+                                    <CCardHeader className=" border-0">
+                                        <h3 className="text-center">Agency Details</h3>
                                     </CCardHeader>
-                                    <CCardBody></CCardBody>
-                                    <table className="table table-bordered table-striped">
-                                        <tbody>
-                                        <tr>
-                                            <td><strong>Id:</strong> <br/> {item.id}</td>
-                                            <td className="text-capitalize">
-                                                <strong>Company Name:</strong> <br/> {item.establishment_name}
-                                            </td>
-                                            <td className="text-capitalize">
-                                                <strong>Business Type:</strong> <br/> {item.nature_of_business}
-                                            </td>
-                                            <td>
-                                                <strong>Contact No.:</strong> <br/> {item.mobile}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Email:</strong> <br/> {item.email}</td>
-                                            <td colSpan="2">
-                                                <strong>Address:</strong> <br/> {item.address}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <hr/>
+                                    <CCardBody className="p-4">
+                                        <div className="d-flex flex-wrap mb-3">
+                                            <div className=" mb-2 col-lg-3">
+                                                <strong>Id:</strong> <br /> {item.id}
+                                            </div>
+                                            <div className=" mb-2 col-lg-3">
+                                                <strong>Company Name:</strong> <br /> {item.establishment_name}
+                                            </div>
+                                            <div className=" mb-2 col-lg-3">
+                                                <strong>Business Type:</strong> <br /> {item.nature_of_business}
+                                            </div>
+                                            <div className="mb-2 col-lg-3">
+                                                <strong>Contact No.:</strong> <br /> {item.mobile}
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-wrap">
+                                            <div className="me-4 mb-2">
+                                                <strong>Email:</strong> <br /> {item.email}
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong>Address:</strong> <br /> {item.address}
+                                            </div>
+                                        </div>
+                                    </CCardBody>
                                 </CCard>
                             ))
                         }
+
 
                         <CCard className="mb-4">
                             <CCardHeader>
@@ -724,7 +724,7 @@ let SearchBookingDetails = () => {
             }
             {/*</div>*/}
 
-        </>
+        </div>
     )
 }
 

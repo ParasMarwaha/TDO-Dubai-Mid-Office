@@ -73,7 +73,7 @@ const EditPax = ({selectedPax, fetchDetails, paxHandleClose}) => {
                     <div className="row">
                         <div className="col-md-4 mb-3">
                             <label htmlFor="">Booking Detail Id</label>
-                            <input type={"number"}  className="form-control" readOnly
+                            <input type={"number"}  className="form-control" readOnly style={{background:"lightgray"}}
                                    {...register('booking_detail_id', {required: 'This field is required.'})}/>
                         </div>
                         <div className="col-md-4 mb-3">

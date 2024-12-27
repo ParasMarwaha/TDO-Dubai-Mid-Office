@@ -107,7 +107,7 @@ function SearchBookings() {
             )
         },
         {name: <div>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
-        {name: <div>Flight <br/>Type</div>, selector: row => row.trip_type || '', sortable: true, wrap: true},
+        {name: <div>Flight <br/>Type</div>, selector: row => row.trip_type || '', sortable: true, wrap: true,minWidth: '120px'},
         {
             name: <div>Booking <br />Date</div>,
             selector: row => {

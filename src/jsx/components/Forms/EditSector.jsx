@@ -89,7 +89,7 @@ const EditSector = ({selectedSector, fetchDetails, handleClose}) => {
                     <div className="row">
                         <div className="col-md-4 mb-3">
                             <label htmlFor="">Sector Id</label>
-                            <input type={"number"} className="form-control" readOnly
+                            <input type={"number"} className="form-control" readOnly style={{background:"lightgray"}}
                                    {...register('sector_id', {required: 'This field is required.'})}/>
                         </div>
                         <div className="col-md-4 mb-3">

@@ -1,0 +1,432 @@
+.rounded-modal {
+    border-radius: 15px; /* Adjust value as needed */
+    /*overflow: hidden;    !* Prevents content from spilling over rounded corners *!*/
+}
+
+body
+{
+    background-color: white !important;
+}
+/*.invoice-container {*/
+/*    width: 100%;*/
+/*}*/
+/*h1 {*/
+/*    color: #e74c3c;*/
+/*    text-align: center;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+/*.invoice-header, .invoice-footer {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
+/*.invoice-header div, .invoice-footer div {*/
+/*    width: 45%;*/
+/*}*/
+/*table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+/*table, th, td {*/
+/*    border: 1px solid #ddd;*/
+/*}*/
+/*th, td {*/
+/*    padding: 10px;*/
+/*    text-align: left;*/
+/*}*/
+/*th {*/
+/*    background-color: #f8f8f8;*/
+/*    color: #333;*/
+/*}*/
+/*.total {*/
+/*    font-size: 1.5em;*/
+/*    color: #e74c3c;*/
+/*    text-align: right;*/
+/*}*/
+.badge {
+    padding: 3px 6px;
+    border-radius: 3px;
+    margin-left: 5px; /* Adjust as needed */
+}
+
+/* Base for label styling */
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+    position: absolute;
+    left: 0;
+    opacity: 0.01;
+}
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 2.3em;
+    font-size: 1.05em;
+    line-height: 1.7;
+    cursor: pointer;
+}
+
+/* checkbox aspect */
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.4em;
+    height: 1.4em;
+    border: 1px solid #aaa;
+    background: #FFF;
+    border-radius: .2em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
+    -webkit-transition: all .275s;
+    transition: all .275s;
+}
+
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+    content: '\2713';
+    position: absolute;
+    top: .525em;
+    left: .18em;
+    font-size: 1.375em;
+    color: red;
+    line-height: 0;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+}
+
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0) rotate(45deg);
+    transform: scale(0) rotate(45deg);
+}
+
+[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1) rotate(0);
+    transform: scale(1) rotate(0);
+}
+
+/* Disabled checkbox */
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+    box-shadow: none;
+    border-color: #bbb;
+    background-color: #e9e9e9;
+}
+
+[type="checkbox"]:disabled:checked + label:after {
+    color: #777;
+}
+
+[type="checkbox"]:disabled + label {
+    color: #aaa;
+}
+
+/* Accessibility */
+[type="checkbox"]:checked:focus + label:before,
+[type="checkbox"]:not(:checked):focus + label:before {
+    box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 6px rgba(203, 34, 237, .2);
+}
+
+
+.icon1 {
+    font-size: 20px;
+    color: red;
+}
+.status {
+    font-weight: bold;
+    color: #007bff; /* blue color */
+}
+.type {
+    color: #28a745; /* green color */
+}
+.transaction-details p {
+    margin-bottom: 0; /* Ensure paragraphs are inline */
+}
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.table {
+    width: 100%;
+    table-layout: auto; /* Changed from fixed to auto for more flexibility */
+    border-collapse: collapse;
+    white-space: nowrap; /* Prevent wrapping in table cells by default */
+}
+
+.table th, .table td {
+    padding: 5px 5px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 11px;
+    border: 2px solid #ddd;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all; /* Breaks long words without spaces */
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Set specific widths for columns with typically longer text */
+.table td:nth-child(1), /* TDO Reference Id */
+.table td:nth-child(2), /* Total Amount Paid */
+.table td:nth-child(3), /* Ticket Status */
+.table td:nth-child(4), /* Markup By Agent */
+.table td:nth-child(5), /* Departure Airport */
+.table td:nth-child(6), /* Departure Airport */
+.table td:nth-child(7), /* Departure Airport */
+.table td:nth-child(8)  /* Arrival Airport */ {
+    min-width: 100px;
+    max-width: 100px;
+    white-space: normal; /* Allow wrapping for longer text */
+}
+
+.table th:nth-child(1), /* TDO Reference Id */
+.table th:nth-child(2), /* Total Amount Paid */
+.table th:nth-child(3), /* Ticket Status */
+.table th:nth-child(4), /* Markup By Agent */
+.table th:nth-child(5), /* Departure Airport */
+.table th:nth-child(6), /* Departure Airport */
+.table th:nth-child(7), /* Departure Airport */
+.table th:nth-child(8)  /* Arrival Airport */ {
+    min-width: 100px;
+    max-width: 100px;
+    white-space: normal; /* Allow wrapping for longer text */
+}
+
+.table td img {
+    max-width: 30px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.nowrap {
+    white-space: nowrap; /* Prevent wrapping for specific short text */
+}
+
+@media (max-width: 768px) {
+    .table th, .table td {
+        font-size: 6px;
+        padding: 6px;
+    }
+    .table td:nth-child(1), .table td:nth-child(3),
+    .table td:nth-child(6), .table td:nth-child(7) {
+        min-width: 80px;
+        max-width: 120px;
+    }
+}
+
+/* Styling the table title */
+h5,.sector-row {
+    background-color: #ec3e3e;
+    border-radius: 12px;
+    padding: 5px;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: left;
+    margin-bottom: 15px;
+}
+h6{
+    padding: 8px;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: right;
+
+}
+
+.print-button {
+
+    margin: 8px;
+    background: linear-gradient(135deg, #ec3e3e, rgba(236, 62, 62, 0.82)); /* Green gradient */
+    color: #fff;
+    padding: 5px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: all 0.3s ease;
+}
+
+.print-button:hover {
+    background: linear-gradient(135deg, #ec3e3e, rgba(236, 62, 62, 0.82)); /* Lighter green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.print-button:active {
+    background: linear-gradient(135deg, #ec3e3e, rgba(236, 62, 62, 0.82));
+    transform: translateY(0); /* Reset lift effect on click */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px; /* Space between options */
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.radio-option input[type="radio"] {
+    display: none; /* Hide default radio button */
+}
+
+.radio-option i {
+    font-size: 20px;
+    color: #4CAF50;
+    margin-right: 8px;
+}
+
+.radio-option .price {
+    margin-left: auto;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.radio-option:hover {
+    background-color: #e0e0e0;
+}
+
+.radio-option input[type="radio"]:checked + i {
+    color: #388E3C; /* Change icon color when selected */
+}
+
+.radio-option input[type="radio"]:checked + span {
+    color: #388E3C; /* Change text color when selected */
+}
+
+@page {
+    size: portrait;
+    margin: 25px;
+}
+
+@media print {
+
+    /* Reset body padding and margin for better fit */
+    body {
+        margin: 40px !important;
+        padding: 0;
+        font-size: 10px !important; /* Default font size for print */
+    }
+
+
+
+    .container-fluid {
+        width: 100%;               /* Set width to 90% */
+        /* Set a maximum width for the content */
+        margin: 0 auto;           /* Center the container horizontally */
+        padding: 5px;            /* Add padding around the content */
+    }
+
+    /* Apply uniform margins to the entire page */
+
+
+    /* Adjust font size for ticket content */
+    .ticket-content {
+        font-size: 10px; /* Adjust ticket content font size */
+        line-height: 1.4; /* Improve line spacing for readability */
+    }
+
+    /* Table adjustments for print */
+    .table {
+        width: 100%;
+        table-layout: fixed; /* Ensure tables fit */
+        font-size: 10px !important; /* Adjust table text size */
+        margin-bottom: 20px; /* Ensure tables don't overflow */
+
+    }
+
+    .table th, .table td {
+        padding: 8px; /* Decrease padding to save space */
+        text-align: left;
+        font-size: 10px !important;
+        vertical-align: middle;
+        border: 1px solid #ddd;
+    }
+
+    /* Page breaks for large content */
+    /* Ensure body has no padding or margin */
+
+
+    /* Adjust container styles to fit within the print margins */
+
+
+    /* Set uniform padding for rows */
+    .row {
+        margin: 0;
+        padding: 0;
+    }
+
+
+
+    /* Ensure images and logos fit within the page */
+    img {
+        max-width: 100%; /* Ensure images scale down */
+        height: auto;
+    }
+
+    /* Hide unnecessary elements like buttons and modals during print */
+    .print-button, .modal, .footer {
+        display: none;
+    }
+
+    /* Optional: adjust page margins for print */
+}
+.row {
+    display: flex;
+    /*flex-wrap: wrap;*/
+}
+ol li {
+    text-align: left;
+    margin-bottom: 1px;
+    font-size: 10px;
+}
+
+ol {
+    margin-bottom: 0.5em;
+}
+
+.icon-flights {
+    width: 40px;
+    margin: auto;
+    float: left;
+    color: red;
+}
+
+.icon-flights-green {
+    width: 40px;
+    margin: auto;
+    float: left;
+    color: green;
+}
+
+#pdf-content {
+    width: 100%;
+    box-sizing: border-box; /* Include padding in the total width */
+    overflow: hidden; /* Prevent content overflow */
+}
+.fs-12{
+    font-size: 12px;
+}

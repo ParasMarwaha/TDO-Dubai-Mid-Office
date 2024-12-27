@@ -172,6 +172,7 @@ import CancellationQueue from "./pages/Flights/CancellationQueue.jsx";
 import FlightCancellationDetails from "./pages/Flights/FlightCancellationDetails.jsx";
 import SearchBookings from "./pages/Flights/SearchBookings.jsx";
 import SearchBookingDetails from "./pages/Flights/SearchBookingDetails.jsx";
+import PrintTicket from "./pages/Flights/PrintTicket.jsx";
 
 const Markup = () => {
     const allroutes = [
@@ -212,6 +213,7 @@ const Markup = () => {
         {url: "booked-flights", component: <BookedFlights/>},
         {url: "search-booked-flights", component: <SearchBookings/>},
         {url: "/search-booked-flight-details", component: <SearchBookingDetails/>},
+        {url: "/print-ticket", component: <PrintTicket/>},
         {url: "hold-flights", component: <HoldFlights/>},
         {url: "/cancel-flights", component: <CancellationQueue/>},
         {url: "/cancellation-flight-details", component: <FlightCancellationDetails/>},
