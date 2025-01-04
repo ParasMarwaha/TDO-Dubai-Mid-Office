@@ -435,7 +435,7 @@ let FlightCancellationDetails = () => {
                                     <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Discounted Price</th>
                                     <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Taxes and Other Charges</th>
                                     <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Cancellation Charges</th>
-                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Final Amount</th>
+                                    <th className='fs-12' style={{whiteSpace: "pre-wrap"}}>Final Amount <br/>(AED)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -453,6 +453,7 @@ let FlightCancellationDetails = () => {
                                                            type="number"
                                                            id={"base_fare" + item.cancel_detail_id}
                                                            placeholder="0"
+                                                           style={{background:"lightgray"}}
                                                            readOnly
                                                            {...register('base_fare' + item.cancel_detail_id)}
                                                            defaultValue={parseFloat(item.base_fare)}
@@ -467,6 +468,7 @@ let FlightCancellationDetails = () => {
                                                            type="number"
                                                            id={"discountedPrice" + item.cancel_detail_id}
                                                            placeholder="0"
+                                                           style={{background:"lightgray"}}
                                                            readOnly
                                                            {...register('discountedPrice' + item.cancel_detail_id, {required: true})}
                                                            defaultValue={parseFloat(item.base_fare) - parseFloat(item.commission)}
@@ -531,10 +533,11 @@ let FlightCancellationDetails = () => {
                                             <td>
                                                 {(isCheckingStatus !== "Cancelled" || isCheckingStatus !== "Rejected") ? (
                                                     <CInputGroup className="flex-nowrap">
-                                                        <CInputGroupText>AED</CInputGroupText>
+                                                        {/*<CInputGroupText>AED</CInputGroupText>*/}
                                                         <CFormInput
                                                             type="number"
                                                             placeholder="0"
+                                                            style={{background:"lightgrey"}}
                                                             readOnly
                                                             {...register('finalAmount' + item.cancel_detail_id)}
                                                             defaultValue={

@@ -6,6 +6,7 @@ import PageTitle from "../../layouts/PageTitle.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {Logout} from "../../../store/actions/AuthActions.js";
+import button from "../../components/bootstrap/Button.jsx";
 
 function SearchBookings() {
     const [logs, setLogs] = useState([]);
@@ -22,44 +23,81 @@ function SearchBookings() {
         dispatch(Logout(navigate));
     };
 
-    useEffect(() => {
-        async function fetchLogs() {
-            setLoading(true);
-            try {
-                const dataLS = localStorage.getItem(adminAuthToken);
-                if (!dataLS) {
-                    throw new Error('No authentication token found.');
+    async function fetchLogs() {
+        setLoading(true);
+        try {
+            const dataLS = localStorage.getItem(adminAuthToken);
+            if (!dataLS) {
+                throw new Error('No authentication token found.');
+            }
+            const parsedData = JSON.parse(dataLS);
+            const response = await fetch(`${Server_URL}admin/getFlightBookingData`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${parsedData.idToken}`
                 }
-                const parsedData = JSON.parse(dataLS);
-                const response = await fetch(`${Server_URL}admin/getFlightBookingData`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${parsedData.idToken}`
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
-                const result = await response.json();
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const result = await response.json();
 
-                if (result.message === 'Session Expired' || result.message === 'Token Missing') {
-                    return onLogout();
-                }
-                if (result.responseCode === 2) {
-                    console.log(result.data)
-                    setLogs(result.data);
-                } else {
-                    Swal.fire({icon: 'error', title: result.message});
-                }
-            } catch (error) {
-                Swal.fire({icon: 'error', title: 'An error occurred', text: error.message});
-            } finally {
-                setLoading(false);
+            if (result.message === 'Session Expired' || result.message === 'Token Missing') {
+                return onLogout();
+            }
+            if (result.responseCode === 2) {
+                console.log(result.data)
+                setLogs(result.data);
+            } else {
+                Swal.fire({icon: 'error', title: result.message});
+            }
+        } catch (error) {
+            Swal.fire({icon: 'error', title: 'An error occurred', text: error.message});
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    useEffect(() => {
+        fetchLogs().then();
+    }, []);
+
+    const handleAbort = async (row) => {
+        console.log("Aborting ticket:", row.booking_id);
+        try {
+            const dataLS = localStorage.getItem(adminAuthToken);
+            if (!dataLS) {
+                throw new Error('No authentication token found.');
+            }
+            const parsedData = JSON.parse(dataLS);
+            const response = await fetch(`${Server_URL}admin/abort-booking/${row.booking_id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${parsedData.idToken}`
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const result = await response.json();
+
+            if (result.message === 'Session Expired' || result.message === 'Token Missing') {
+                return onLogout();
+            }
+            if (result.responseCode === 2) {
+                Swal.fire({icon: 'success', title: result.message}).then(()=>{
+                    fetchLogs();
+                });
+            } else {
+                Swal.fire({icon: 'error', title: result.message});
             }
         }
+        catch (error) {
+            Swal.fire({icon: 'error', title: 'An error occurred', text: error.message});
+        }
+    };
 
-        fetchLogs();
-    }, []);
 
     const filteredLogs = logs.filter(log => {
         const search = searchTerm.toLowerCase();
@@ -106,6 +144,25 @@ function SearchBookings() {
                 </Link>
             )
         },
+        {
+            name: <div>Action</div>,
+            selector: row => {
+                if (row.ticket_status === "Failed") {
+                    return (
+                        <button
+                            type="button" className="btn btn-sm btn-primary p-1" style={{background:"yellowgreen"}}
+                            onClick={() => handleAbort(row)}
+                        >
+                            Abort
+                        </button>
+                    );
+                }
+                return ''; // Fallback for rows without "Failed" status
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '100px',
+        },
         {name: <div>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
         {name: <div>Flight <br/>Type</div>, selector: row => row.trip_type || '', sortable: true, wrap: true,minWidth: '120px'},
         {
@@ -144,13 +201,20 @@ function SearchBookings() {
                         backgroundColor = 'bg-danger text-white p-1'; // Red for Failed
                         break;
                     case 'ABORTED':
-                        backgroundColor = 'bg-warning text-black p-1'; // Mustard for Aborted
+                        backgroundColor = 'bg-info text-black p-1'; // Mustard for Aborted
                         break;
                     default:
                         backgroundColor = ''; // Default (no background color)
                         break;
                 }
 
+                if(backgroundColor === 'bg-info text-black p-1'){
+                    return (
+                        <div className="text-black p-1" style={{borderRadius: '7px',background:"yellow"}}>
+                            {row.ticket_status || ''}
+                        </div>
+                    );
+                }
                 // Return the formatted cell with background color
                 return (
                     <div className={backgroundColor} style={{borderRadius: '7px'}}>

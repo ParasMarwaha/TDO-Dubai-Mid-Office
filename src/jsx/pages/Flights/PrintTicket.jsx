@@ -2,7 +2,7 @@ import { useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Server_URL, adminAuthToken, Server_URL_FILE} from "../../../helpers/config.js";
-// import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min';
+import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min';
 import Swal from "sweetalert2";
 import PageTitle from "../../layouts/PageTitle.jsx";
 
@@ -16,12 +16,15 @@ let PrintTicket = () => {
     let [passenger, setPassenger] = useState([]);
     let [segment, setSegment] = useState([]);
     let [agent, setAgent] = useState([]);
-    let [ssr,setSsr] = useState([]);
+    let [id,setId] = useState("");
+
+
     useEffect(() => {
         let dataLS = localStorage.getItem(adminAuthToken);
         if (dataLS) {
             dataLS = JSON.parse(dataLS);
         }
+        setId(location.state.id)
         axios.get(Server_URL + "admin/getFlightBookingDetailData/" + location.state.id, {
             headers: {
                 'Authorization': `Bearer ${dataLS.idToken}`,
@@ -48,104 +51,12 @@ let PrintTicket = () => {
         })
     }, []);
 
-    function formatDateTimeExact(isoString) {
-        const [datePart, timePart] = isoString.split('T');
-        const [year, month, day] = datePart.split('-');
-        const [hours, minutes] = timePart.split(':');
-
-        // Convert to readable format
-        const formattedDate = `${parseInt(month, 10)}/${parseInt(day, 10)}/${year}`;
-        const hours12 = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
-        const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
-
-        return `${formattedDate}, ${hours12}:${minutes} ${ampm}`;
-    }
-
-    /*
-      const exportToPdf = async () => {
-        const options = {
-          margin: [0, 0.5, 0.75, 0.5], // Adjust margins as needed
-          filename: `Ticket${location.state.id}.pdf`,
-          image: {type: 'jpeg', quality: 0.98},
-          html2canvas: {scale: 2, useCORS: true},
-          // jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'},
-          jsPDF: {unit: 'in', format: 'a4', orientation: 'landscape'},
-          pagebreak: {mode: ['css', 'legacy']} // Simplify the page break options
-        };
-
-        // Select the content you want to convert to PDF
-        const content = document.getElementById('pdf-content'); // Make sure to give your component a unique ID, e.g., 'pdf-content'
-
-        // Check if the content is found
-        if (!content) {
-          alert("Content not found for PDF export!");
-          return;
-        }
-
-        // Generate the PDF
-        html2pdf()
-          .from(content)
-          .set(options)
-          .toPdf()
-          .get('pdf')
-          .then((pdf) => {
-            const totalPages = pdf.internal.getNumberOfPages();
-            for (let i = 1; i < totalPages; i++) {
-              pdf.setPage(i);
-              const pageWidth = pdf.internal.pageSize.getWidth();
-              const pageHeight = pdf.internal.pageSize.getHeight();
-              // pdf.text(`page ${i} of ${totalPages}`, pageWidth - 1, pageHeight - 1, {align: 'right', fontSize: 1});
-            }
-          })
-          .save();
-      };
-    */
-    const preloadImages = () => {
-        const images = Array.from(document.getElementById('pdf-content').querySelectorAll('img'));
-        return Promise.all(
-            images.map(img => {
-                return new Promise((resolve, reject) => {
-                    const testImg = new Image();
-                    testImg.src = img.src;
-                    testImg.onload = resolve;
-                    testImg.onerror = reject;
-                });
-            })
-        );
-    };
-
-    /*  const exportToPdf = async () => {
-        const content = document.getElementById('pdf-content');
-        if (!content) {
-          alert("Content not found for PDF export!");
-          return;
-        }
-
-        try {
-          // Wait for all images to load
-          await preloadImages();
-
-          const options = {
-            margin: [0.25, 0.5, 0.75, 0.5],
-            filename: `Ticket${location.state.id}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' },
-            pagebreak: { mode: ['css', 'legacy'] }
-          };
-
-          await html2pdf().from(content).set(options).save();
-        } catch (error) {
-          console.error("Error loading images or exporting PDF:", error);
-        }
-      };*/
     const exportToPdf = async () => {
         const content = document.getElementById('pdf-content');
         if (!content) {
             alert("Content not found for PDF export!");
             return;
         }
-
 
         try {
             // Preload images in the content
@@ -163,18 +74,25 @@ let PrintTicket = () => {
 
             await preloadImages(); // Ensure all images are loaded
 
-            // const options = {
-            //     margin: [0.25, 0.5, 0.75, 0.5],
-            //     filename: `Ticket${location.state.id}.pdf`,
-            //     image: {type: 'jpeg', quality: 0.98},
-            //     html2canvas: {scale: 2, useCORS: true},
-            //     jsPDF: {unit: 'in', format: 'a4', orientation: 'landscape'},
-            //     pagebreak: {mode: ['css', 'legacy']},
-            // };
+            const options = {
+                margin: [0.25, 0.5, 0.75, 0.5],
+                filename: `Ticket-${location.state?.id || 'default'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' },
+                pagebreak: { mode: ['css', 'legacy'] },
+            };
 
-            // await html2pdf().from(content).set(options).save();
+            // Show loading indicator (optional)
+            console.log("Generating PDF...");
+
+            await html2pdf().from(content).set(options).save();
+
+            // Hide loading indicator (optional)
+            console.log("PDF generated successfully!");
         } catch (error) {
             console.error("Error loading images or exporting PDF:", error);
+            alert("An error occurred while exporting the PDF. Please try again.");
         }
     };
 
@@ -202,7 +120,7 @@ let PrintTicket = () => {
                     <div>
                         <div className="row mb-2">
                             <div className="col-lg-3 offset-lg-9 text-end">
-                                <button type={"button"} onClick={exportToPdf} className="btn btn-sm btn-primary btn-block"><i
+                                <button type={"button"} onClick={exportToPdf} className="btn btn-sm btn-primary"><i
                                     className={"fa-solid fa-file-pdf"}></i> Export to Pdf
                                 </button>
                             </div>
@@ -265,7 +183,7 @@ let PrintTicket = () => {
                                                     <h4 className="text-white">{sec.origin} - {sec.destination}</h4>
                                                 </div>
                                                 <div className="col-sm-4">
-                                                    <img src={"/images/1.png"} alt=""
+                                                    <img src={"/images/icons/1.png"} alt=""
                                                          style={{width: "100%", height: "100%"}}/>
                                                 </div>
                                                 <div className="col-sm-4 text-end">
@@ -278,7 +196,7 @@ let PrintTicket = () => {
                                     {segment.some(segItem => segItem.sector_id === sec.sector_id) && (
                                         <div className="table-responsive mt-4">
                                             <table className="table table-striped table-bordered align-middle">
-                                                <thead className="text-center">
+                                                <thead className="">
                                                 <tr>
                                                     <th className={"fs-12 p-1"}>Flight</th>
                                                     <th className={"fs-12 p-1"}>PNR</th>
@@ -292,9 +210,9 @@ let PrintTicket = () => {
                                                 {segment
                                                     .filter(segItem => segItem.sector_id === sec.sector_id)
                                                     .map((segItem, segInd) => (
-                                                        <tr key={segInd} className="text-center">
+                                                        <tr key={segInd} className="">
                                                             <td className={"fs-12 p-1"}>
-                                                                <div className="d-flex flex-column align-items-center">
+                                                                <div className="d-flex flex-column ">
                                                                     <img
                                                                         src={`https://content.airhex.com/content/logos/airlines_${segItem.airline_code}_50_50_s.png`}
                                                                         alt={`${segItem.airline_name} logo`}
@@ -340,7 +258,7 @@ let PrintTicket = () => {
                                         <div className="col-lg-12">
                                             <div className="table-responsive">
                                                 <table className="table table-striped table-bordered">
-                                                    <thead className="text-center">
+                                                    <thead className="">
                                                     <tr>
                                                         <th className={"fs-12 p-1"}>Sr. No. & Name</th>
                                                         <th className={"fs-12 p-1"}>Pax Type</th>
@@ -354,7 +272,7 @@ let PrintTicket = () => {
                                                         passenger
                                                             .filter(passItem => passItem.sector_id === sec.sector_id)
                                                             .map((passItem, passInd) => (
-                                                                <tr key={passInd} className="text-center">
+                                                                <tr key={passInd} className="">
                                                                     <td className={"fs-12 p-1"}>
                                                                         <strong>{passInd + 1}.</strong>{" "}
                                                                         {`${passItem.salutation} ${passItem.first_name} ${passItem.last_name}`}
@@ -394,7 +312,7 @@ let PrintTicket = () => {
                                     <h4 className="bg-danger text-white py-2 px-2 rounded">Payment Details</h4>
                                 </div>
                                 <div className="table-container">
-                                    <table className="table">
+                                    <table className="table table-striped table-bordered">
                                         <thead>
                                         <tr>
                                         <th className={"fs-12 p-1"}>Payment Type</th>
@@ -489,6 +407,7 @@ let PrintTicket = () => {
                                                 <div className={"fs-12"}> Explosives</div>
                                             </div>
                                         </div>
+
                                         <div className="row mb-2">
                                             <div className="col-lg-2 col-sm-2 offset-lg-1 offset-sm-1 text-start">
                                                 <img src="/images/icons/virus.svg" style={{width: "50px", height: "50px"}}
@@ -516,6 +435,7 @@ let PrintTicket = () => {
                                                 <div className={"fs-12"}> Corrosive</div>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div className="col-lg-5 col-sm-5">
                                         <div className="row mb-2">
