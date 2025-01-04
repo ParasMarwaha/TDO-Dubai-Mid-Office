@@ -154,7 +154,7 @@ function CreateUser() {
 
         <div>
             <div>
-                <PageTitle motherMenu="Staff" activeMenu="Create Staff " pageContent="Create Staff"/>
+                <PageTitle motherMenu="Staff" activeMenu="/create-user" pageContent="Create Staff"/>
 
                 <>
                         <div className="card">

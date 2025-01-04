@@ -127,7 +127,7 @@ function MidOfficeActivityAgentLog() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Logs" activeMenu="Mid Office Agent Activity " pageContent="Mid Office Agent Activity"/>
+                <PageTitle motherMenu="Logs" activeMenu="/mid-office-activity-onAgent-log" pageContent="Mid Office Agent Activity"/>
 
                 <div className="card mb-4">
                     <div className="card-body">

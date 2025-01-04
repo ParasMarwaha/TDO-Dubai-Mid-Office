@@ -219,7 +219,7 @@ function ViewAgentsPartners() {
 
     return (
         <div>
-            <PageTitle motherMenu="Partners" activeMenu="Mapped Sales Person"
+            <PageTitle motherMenu="Partners" activeMenu="/partners-agents"
                        pageContent="All Agents & Partners" />
 
             <div className="card">

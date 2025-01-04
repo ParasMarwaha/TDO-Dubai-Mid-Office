@@ -291,7 +291,7 @@ function FareType() {
 
     return (
         <div>
-            <PageTitle motherMenu="Control Panel" activeMenu="Fare" pageContent="Fare" />
+            <PageTitle motherMenu="Control Panel" activeMenu="/fare-type" pageContent="Fare" />
 
             {/* Edit Modal */}
             <div className={`modal fade ${showEditModal ? "show d-block" : "d-none"}`} tabIndex="-1"

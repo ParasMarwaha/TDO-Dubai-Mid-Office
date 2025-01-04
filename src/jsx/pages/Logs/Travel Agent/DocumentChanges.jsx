@@ -150,7 +150,7 @@ function DocumentChanges() {
 
     return (
         <div>
-            <PageTitle motherMenu="Logs" activeMenu="Travel Agent Document Changes" pageContent="Travel Agent Document Changes" />
+            <PageTitle motherMenu="Logs" activeMenu="/document-changes" pageContent="Travel Agent Document Changes" />
 
             <div className="card mb-4">
                 <div className="card-body">

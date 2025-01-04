@@ -204,7 +204,7 @@ function ServiceFee() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Control Panel" activeMenu="Platform Fees" pageContent="Platform Fees"/>
+                <PageTitle motherMenu="Control Panel" activeMenu="/service-fee" pageContent="Platform Fees"/>
 
                 <>
                     {/* Edit Modal */}

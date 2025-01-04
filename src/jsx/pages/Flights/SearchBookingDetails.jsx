@@ -135,7 +135,7 @@ let SearchBookingDetails = () => {
 
     return (
         <div>
-            <PageTitle motherMenu="" activeMenu="Flights/Search Booking Details" pageContent="Flights/Search Booking Details" />
+            <PageTitle motherMenu="Flights" activeMenu="/search-booked-flight-details" pageContent="Search Booking Details" />
 
             {/*<div className={"container-fluid"}>*/}
             {
@@ -156,15 +156,26 @@ let SearchBookingDetails = () => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <div className={"btn-group d-flex flex-wrap gap-2"}>
-                                            <Link to={"/print-ticket"} state={{ id: booking.booking_id }}>
-                                                <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Print Ticket</button>
-                                            </Link>
-                                            <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Email
-                                                Ticket
-                                            </button>
-                                            <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Sector Cancellation</button>
-                                            <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Partial Cancellation</button>
-                                            <button type={"button"} className={"btn btn-sm btn-outline-primary"}>Full Cancellation</button>
+                                            {booking.ticket_status === "Failed" ? (
+                                                <button
+                                                    type={"button"}
+                                                    className={"btn btn-sm btn-outline-primary"}
+                                                >
+                                                    Print Ticket
+                                                </button>
+                                            ) : (
+                                                <Link to={"/print-ticket"} state={{ id: booking.booking_id }}>
+                                                    <button type={"button"} className={"btn btn-sm btn-outline-primary"}>
+                                                        Print Ticket
+                                                    </button>
+                                                </Link>
+                                            )}
+                                            {/*<button type={"button"} className={"btn btn-sm btn-outline-primary"}>Email*/}
+                                            {/*    Ticket*/}
+                                            {/*</button>*/}
+                                            {/*<button type={"button"} className={"btn btn-sm btn-outline-primary"}>Sector Cancellation</button>*/}
+                                            {/*<button type={"button"} className={"btn btn-sm btn-outline-primary"}>Partial Cancellation</button>*/}
+                                            {/*<button type={"button"} className={"btn btn-sm btn-outline-primary"}>Full Cancellation</button>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -286,13 +297,16 @@ let SearchBookingDetails = () => {
                                     <div className="col-lg-4 mt-2">
                                         <strong>Flight No.:</strong> {sectorJson[0]?.flight_number}
                                     </div>
+                                    <div className="col-lg-4 mt-2">
+                                        <strong>Remarks:</strong> {booking.remarks}
+                                    </div>
                                 </div>
                             </CCardBody>
                         </CCard>
 
                         <CCard className="mb-4">
                             <CCardHeader>
-                                    <div className="col-lg-9">
+                            <div className="col-lg-9">
                                         <div className="fs-3 fw-bold">Passenger/PAX Details</div>
                                     </div>
                                     <div className="col-lg-3 text-end">

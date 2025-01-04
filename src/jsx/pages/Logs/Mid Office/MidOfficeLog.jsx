@@ -130,7 +130,7 @@ function MidOfficeLog() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Logs" activeMenu="Mid Office " pageContent="Mid Office"/>
+                <PageTitle motherMenu="Logs" activeMenu="/mid-office-log" pageContent="Mid Office"/>
 
                 <div className="card mb-4">
                     <div className="card-body">

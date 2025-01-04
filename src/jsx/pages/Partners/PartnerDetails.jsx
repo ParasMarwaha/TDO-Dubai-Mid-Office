@@ -644,7 +644,7 @@ const PartnerDetails = () => {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Partners" activeMenu="Partner Details" pageContent="Partner Details"/>
+                {/*<PageTitle motherMenu="Partners" activeMenu="/agent-details" pageContent="Partner Details"/>*/}
 
                 {partnerInfo ?
                     <>

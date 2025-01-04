@@ -743,7 +743,7 @@ function UserGroup() {
 
     return (
         <div>
-            <PageTitle motherMenu="Control Panel" activeMenu="User Groups" pageContent="User Groups" />
+            <PageTitle motherMenu="Control Panel" activeMenu="/user-group" pageContent="User Groups" />
             <div className="card mb-4">
                 <div className="card-body">
                     <h2 className="text-center"><b>User Groups</b></h2>

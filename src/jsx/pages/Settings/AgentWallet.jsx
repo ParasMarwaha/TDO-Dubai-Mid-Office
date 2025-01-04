@@ -576,7 +576,7 @@ function SearchAgency() {
 
     return (
         <div>
-            <PageTitle motherMenu="Control Panel" activeMenu="Wallet" pageContent="Wallet"/>
+            <PageTitle motherMenu="Control Panel" activeMenu="/agent-wallet" pageContent="Wallet"/>
 
             {/* Search Dropdown */}
             <div className="card mb-4">

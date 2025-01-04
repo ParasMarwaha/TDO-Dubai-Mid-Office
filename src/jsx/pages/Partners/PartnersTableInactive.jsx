@@ -175,7 +175,7 @@ const PartnersTable = () => {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Partners" activeMenu="Inactive Partners" pageContent="Inactive Partners"/>
+                <PageTitle motherMenu="Partners" activeMenu="/inactive-agents" pageContent="Inactive Partners"/>
 
                 <div className="card">
                     <div className="card-header">

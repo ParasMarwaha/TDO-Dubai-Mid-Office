@@ -192,7 +192,7 @@ function ViewUser() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Staff" activeMenu="All Staff Members " pageContent="All Staff Members" />
+                <PageTitle motherMenu="Staff" activeMenu="/users" pageContent="All Staff Members" />
 
                 <div className="card">
                     <div className="card-header">

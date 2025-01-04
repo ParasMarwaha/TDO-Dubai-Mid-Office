@@ -217,7 +217,7 @@ function FlightCommercial() {
 
     return (
         <div>
-            <PageTitle motherMenu="Control Panel" activeMenu="Flights/ Flight Commercial" pageContent="Flights/ Flight Commercial" />
+            <PageTitle motherMenu="Control Panel" activeMenu="/manage-flight-commission" pageContent="Flights/ Flight Commercial" />
 
             <div className="card mb-4">
                 <div className="card-body">

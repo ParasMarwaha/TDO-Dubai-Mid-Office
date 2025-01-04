@@ -139,7 +139,7 @@ function HoldFlights() {
 
     return (
         <div>
-            <PageTitle motherMenu="Flights" activeMenu="Hold Flights Tickets"
+            <PageTitle motherMenu="Flights" activeMenu="/hold-flights"
                        pageContent="Hold Flights Tickets" />
 
             <div className="card mb-4">

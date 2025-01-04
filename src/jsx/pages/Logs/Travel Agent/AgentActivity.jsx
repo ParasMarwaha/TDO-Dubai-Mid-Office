@@ -125,7 +125,7 @@ function TravelAgentActivityLogs() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Logs" activeMenu="Travel Agent Activity " pageContent="Travel Agent Activity"/>
+                <PageTitle motherMenu="Logs" activeMenu="/travel-agent-activity-log" pageContent="Travel Agent Activity"/>
 
                 <div className="card mb-4">
                     <div className="card-body">

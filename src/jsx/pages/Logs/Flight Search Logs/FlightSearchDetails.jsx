@@ -151,7 +151,7 @@ function FlightSearchDetails() {
 
     return (
         <div>
-            <PageTitle motherMenu="Logs" activeMenu="Flight Search Details" pageContent="Flight Search Details" />
+            <PageTitle motherMenu="Logs" activeMenu="/search-details" pageContent="Flight Search Details" />
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="table-responsive px-3">

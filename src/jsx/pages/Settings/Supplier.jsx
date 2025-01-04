@@ -285,7 +285,7 @@ function Supplier() {
 
     return (
         <div>
-            <PageTitle motherMenu="Control Panel" activeMenu="Suppliers" pageContent="Suppliers" />
+            <PageTitle motherMenu="Control Panel" activeMenu="/supplier" pageContent="Suppliers" />
 
             {/* Edit Modal */}
             <div className={`modal fade ${showEditModal ? "show d-block" : "d-none"}`} tabIndex="-1"

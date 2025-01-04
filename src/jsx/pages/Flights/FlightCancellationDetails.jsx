@@ -371,7 +371,7 @@ let FlightCancellationDetails = () => {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Flights" activeMenu="Cancellation Queue Details"
+                <PageTitle motherMenu="Flights" activeMenu="/cancellation-flight-details"
                            pageContent="Cancellation Queue Details"/>
 
                 {loader ? <div>

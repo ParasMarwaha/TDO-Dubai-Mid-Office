@@ -124,7 +124,7 @@ function MidOfficeActivityLog() {
     return (
         <div>
             <div>
-                <PageTitle motherMenu="Logs" activeMenu="Mid Office General Activity " pageContent="Mid Office General Activity"/>
+                <PageTitle motherMenu="Logs" activeMenu="/mid-office-activity-log" pageContent="Mid Office General Activity"/>
 
                 <div className="card mb-4">
                     <div className="card-body">

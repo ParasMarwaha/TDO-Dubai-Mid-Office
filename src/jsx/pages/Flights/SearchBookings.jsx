@@ -258,7 +258,7 @@ function SearchBookings() {
 
     return (
         <div>
-            <PageTitle motherMenu="Flights" activeMenu="Search Bookings" pageContent="Search Bookings"/>
+            <PageTitle motherMenu="Flights" activeMenu="/search-booked-flights" pageContent="Search Bookings"/>
 
             <div className="card mb-4">
                 <div className="card-body">

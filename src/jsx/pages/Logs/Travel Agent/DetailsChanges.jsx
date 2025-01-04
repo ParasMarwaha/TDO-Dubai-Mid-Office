@@ -169,7 +169,7 @@ function DetailsChanges() {
 
     return (
         <div>
-            <PageTitle motherMenu="Logs" activeMenu="Travel Agent Details Changes" pageContent="Travel Agent Details Changes" />
+            <PageTitle motherMenu="Logs" activeMenu="/details-changes" pageContent="Travel Agent Details Changes" />
 
             <div className="card mb-4">
                 <div className="card-body">

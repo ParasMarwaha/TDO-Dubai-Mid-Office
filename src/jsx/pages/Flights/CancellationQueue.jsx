@@ -172,7 +172,7 @@ function CancellationQueue() {
 
     return (
         <div>
-            <PageTitle motherMenu="Flights" activeMenu="Cancellation Queue" pageContent="Cancellation Queue" />
+            <PageTitle motherMenu="Flights" activeMenu="/cancel-flights" pageContent="Cancellation Queue" />
 
             <div className="card mb-4">
                 <div className="card-body">

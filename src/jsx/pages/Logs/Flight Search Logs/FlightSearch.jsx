@@ -133,7 +133,7 @@ function FlightSearch() {
 
     return (
         <div>
-            <PageTitle motherMenu="Logs" activeMenu="Travel Agent Flight Search"
+            <PageTitle motherMenu="Logs" activeMenu="/search-log"
                        pageContent="Travel Agent Flight Search"/>
 
             <div className="card mb-4">
