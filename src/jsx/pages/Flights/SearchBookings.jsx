@@ -203,6 +203,12 @@ function SearchBookings() {
                     case 'ABORTED':
                         backgroundColor = 'bg-info text-black p-1'; // Mustard for Aborted
                         break;
+                    case 'HOLD':
+                        backgroundColor = 'bg-info text-black p-1'; // Mustard for Aborted
+                        break;
+                    case 'RELEASED':
+                        backgroundColor = 'bg-info text-black p-2'; // Mustard for Aborted
+                        break;
                     default:
                         backgroundColor = ''; // Default (no background color)
                         break;
@@ -210,7 +216,14 @@ function SearchBookings() {
 
                 if(backgroundColor === 'bg-info text-black p-1'){
                     return (
-                        <div className="text-black p-1" style={{borderRadius: '7px',background:"yellow"}}>
+                        <div className="text-black p-1" style={{borderRadius: '7px',background:"greenyellow"}}>
+                            {row.ticket_status || ''}
+                        </div>
+                    );
+                }
+                if(backgroundColor === 'bg-info text-black p-2'){
+                    return (
+                        <div className="text-black p-1" style={{borderRadius: '7px',background:"lightblue"}}>
                             {row.ticket_status || ''}
                         </div>
                     );
