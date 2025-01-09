@@ -7,6 +7,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {Logout} from "../../../store/actions/AuthActions.js";
 import button from "../../components/bootstrap/Button.jsx";
+import * as XLSX from "xlsx";
+
 
 function SearchBookings() {
     const [logs, setLogs] = useState([]);
@@ -124,7 +126,10 @@ function SearchBookings() {
                 (log.supplier || '').toString().toLowerCase().includes(search) ||
                 (log.payment_type || '').toString().toLowerCase().includes(search) ||
                 (log.agent_amount || '').toString().toLowerCase().includes(search) ||
-                (log.customer_amount || '').toString().toLowerCase().includes(search)
+                (log.customer_amount || '').toString().toLowerCase().includes(search) ||
+                (log.platform_fee || '').toString().toLowerCase().includes(search) ||
+                (log.platform_tax || '').toString().toLowerCase().includes(search) ||
+                (log.gateway_charges || '').toString().toLowerCase().includes(search)
             )
         );
     });
@@ -145,7 +150,7 @@ function SearchBookings() {
             )
         },
         {
-            name: <div>Action</div>,
+            name: 'Action',
             selector: row => {
                 if (row.ticket_status === "Failed") {
                     return (
@@ -163,8 +168,9 @@ function SearchBookings() {
             wrap: true,
             minWidth: '100px',
         },
-        {name: <div>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
-        {name: <div>Flight <br/>Type</div>, selector: row => row.trip_type || '', sortable: true, wrap: true,minWidth: '120px'},
+        {name: <div> Sr.<br/>No.</div>, selector: (row,index) => index +1 || '', sortable: true, wrap: true},
+        {name: <div> TDO <br/>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
+        {name: <div>Agent <br/>Name</div>, selector: row => row.agent_name || '', sortable: true, wrap: true},
         {
             name: <div>Booking <br />Date</div>,
             selector: row => {
@@ -180,9 +186,29 @@ function SearchBookings() {
             },
             sortable: true,
             wrap: true,
-            minWidth: '150px'
+            minWidth: '120px'
         },
-        {name: <div>Agent <br/>Email</div>, selector: row => row.agent_email || '', sortable: true, wrap: true,minWidth:'250px'},
+        {
+            name: <div>PNR</div>,
+            selector: row => {
+                if (row.gdspnr === "Not Processed") {
+                    return ''; // Leave empty if "Not Processed"
+                }
+                return row.gdspnr || ''; // Return the gdspnr value or empty string if undefined
+            },
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: <div>Booked <br/>By</div>,
+            selector: row =>
+                `${row.SubFirstName || ''} ${row.SubLastName || ''}`.trim(),
+            sortable: true,
+            wrap: true,
+            minWidth: '70px'
+        },
+        {name: <div>Location</div>, selector: row => row.SubLocation || '', sortable: true, wrap: true,minWidth:'80px'},
+        // {name: <div>Agent <br/>Email</div>, selector: row => row.agent_email || '', sortable: true, wrap: true,minWidth:'250px'},
         {name: <div>Payment <br/>Status</div>, selector: row => row.payment_status || '', sortable: true, wrap: true},
         {
             name: <div>Booking <br />Status</div>,
@@ -237,21 +263,13 @@ function SearchBookings() {
             }
         },
         {name: <div>Sectors</div>, selector: row => row.origin + '-' + row.destination || '', sortable: true, wrap: true},
-        {
-            name: <div>PNR</div>,
-            selector: row => {
-                if (row.gdspnr === "Not Processed") {
-                    return ''; // Leave empty if "Not Processed"
-                }
-                return row.gdspnr || ''; // Return the gdspnr value or empty string if undefined
-            },
-            sortable: true,
-            wrap: true
-        },
         {name: <div>Supplier</div>, selector: row => row.supplier || '', sortable: true, wrap: true},
         {name: <div>Payment <br/>Method</div>, selector: row => row.payment_type || '', sortable: true, wrap: true},
-        {name: <div>Agent <br/>Amount</div>, selector: row => row.agent_amount || '', sortable: true, wrap: true},
-        {name: <div>Customer <br/>Amount</div>, selector: row => row.customer_amount || '', sortable: true, wrap: true},
+        {name: <div>Agent <br/>Amount <br/>(AED)</div>, selector: row => row.agent_amount || '', sortable: true, wrap: true},
+        {name: <div>Customer <br/>Amount<br/>(AED)</div>, selector: row => row.customer_amount || '', sortable: true, wrap: true},
+        {name: <div>Platform <br/>Fee<br/>(AED)</div>, selector: row => row.platform_fee || '', sortable: true, wrap: true},
+        {name: <div>Platform <br/>Tax<br/>(AED)</div>, selector: row => row.platform_tax || '', sortable: true, wrap: true},
+        {name: <div>Gateway <br/>Charges<br/>(AED)</div>, selector: row => row.gateway_charges || '', sortable: true, wrap: true},
     ];
 
     const currentData = filteredLogs.slice(
@@ -268,6 +286,50 @@ function SearchBookings() {
         setCurrentPage(page);
     };
 
+    const exportToExcel = (columns, data, fileName = "data.xlsx") => {
+        // Exclude the first column and "Action" column
+        const filteredColumns = columns.filter(col =>
+            col.name !== "" && col.name !== "Action"
+        );
+
+        // Extract headers from the filtered columns
+        const headers = filteredColumns.map(col => {
+            if (typeof col.name === "string") {
+                return col.name; // For plain text headers
+            }
+            if (col.name?.props?.children) {
+                if (Array.isArray(col.name.props.children)) {
+                    // Replace <br /> with space in array of children
+                    return col.name.props.children
+                        .map(child => (typeof child === "string" ? child : " "))
+                        .join("");
+                }
+                // Handle single child (replace <br /> with space)
+                return typeof col.name.props.children === "string"
+                    ? col.name.props.children
+                    : " ";
+            }
+            return ""; // Default to empty string if no header is found
+        });
+
+        // Transform data to match the filtered headers
+        const rows = data.map((row, index) => {
+            const transformedRow = {};
+            filteredColumns.forEach((col, colIndex) => {
+                const selector = col.selector || (() => ""); // Default to empty string if no selector
+                transformedRow[headers[colIndex]] = selector(row, index); // Use index for row-related calculations
+            });
+            return transformedRow;
+        });
+
+        // Create worksheet and workbook
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        // Write the Excel file
+        XLSX.writeFile(workbook, fileName);
+    };
 
     return (
         <div>
@@ -329,6 +391,7 @@ function SearchBookings() {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="mb-2"><button onClick={() => exportToExcel(columns,filteredLogs,'data.xlsx')} className="btn-sm btn btn-primary offset-10">Export to Excel</button></div>
 <br/>
 <br/>
                                 <DataTable
