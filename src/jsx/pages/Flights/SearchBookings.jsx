@@ -20,10 +20,16 @@ function SearchBookings() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [dateError, setDateError] = useState('');
+    const [filterBy, setFilterBy] = useState('bookingDate'); // Default to Booking Date
+
 
     const onLogout = () => {
         dispatch(Logout(navigate));
     };
+
 
     async function fetchLogs() {
         setLoading(true);
@@ -50,6 +56,23 @@ function SearchBookings() {
             if (result.responseCode === 2) {
                 console.log(result.data)
                 setLogs(result.data);
+                if (result.data.length > 0) {
+                    const firstBooking = result.data[result.data.length - 1];
+                    const lastBooking = result.data[0];
+
+                    // Use the `booking_date_time` string directly
+                    const firstBookingDate = new Date(firstBooking.booking_date_time);
+                    const lastBookingDate = new Date(lastBooking.booking_date_time);
+
+                    // Set the dates in the correct format for the input fields (YYYY-MM-DD)
+                    if (!isNaN(firstBookingDate) && !isNaN(lastBookingDate)) {
+                        setFromDate(firstBookingDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+                        setToDate(lastBookingDate.toISOString().split('T')[0]);
+                        console.log(fromDate);
+                    } else {
+                        console.error("Invalid date format in transactions.");
+                    }
+                }
             } else {
                 Swal.fire({icon: 'error', title: result.message});
             }
@@ -59,7 +82,6 @@ function SearchBookings() {
             setLoading(false);
         }
     }
-
 
     useEffect(() => {
         fetchLogs().then();
@@ -106,12 +128,25 @@ function SearchBookings() {
         const bookingIdSearch = searchBookingId.toLowerCase();
         const pnrSearch = searchPNR.toLowerCase();
 
+        // Convert fromDate and toDate to Date objects
+        const from = fromDate ? new Date(fromDate) : null;
+        const to = toDate ? new Date(new Date(toDate).setDate(new Date(toDate).getDate() + 1)) : null;
+
+        // Determine the date to filter by based on the filterBy value
+        const logDate = filterBy === 'bookingDate'
+            ? new Date(log.booking_date_time) // Use booking date
+            : new Date(log.departure); // Use travel date (departure)
+
+
         return (
             // Check if booking_id matches the searchBookingId filter
             (log.booking_id || '').toString().toLowerCase().includes(bookingIdSearch) &&
 
             // Check if PNR matches the searchPNR filter
             (log.gdspnr || '').toString().toLowerCase().includes(pnrSearch) &&
+
+            // Check if the log date falls within the date range
+            (!from || !to || (logDate >= from && logDate <= to)) &&
 
             // Check if the search term matches any of the columns
             (
@@ -129,7 +164,9 @@ function SearchBookings() {
                 (log.customer_amount || '').toString().toLowerCase().includes(search) ||
                 (log.platform_fee || '').toString().toLowerCase().includes(search) ||
                 (log.platform_tax || '').toString().toLowerCase().includes(search) ||
-                (log.gateway_charges || '').toString().toLowerCase().includes(search)
+                (log.gateway_charges || '').toString().toLowerCase().includes(search) ||
+                (new Date(log.booking_date_time).toLocaleDateString('en-GB').toLowerCase().includes(search)) ||
+                (new Date(log.departure).toLocaleDateString('en-GB').toLowerCase().includes(search))
             )
         );
     });
@@ -262,6 +299,23 @@ function SearchBookings() {
                 );
             }
         },
+        {
+            name: <div>Travel <br />Date</div>,
+            selector: row => {
+                if (row.departure) {
+                    const dateObj = new Date(row.departure); // Convert to Date object
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const month = monthNames[dateObj.getMonth()]; // Get month name
+                    const day = dateObj.getDate(); // Get day of the month
+                    const year = dateObj.getFullYear(); // Get year
+                    return `${day} ${month} ${year}`; // Return formatted date
+                }
+                return ''; // Fallback for empty date
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
         {name: <div>Sectors</div>, selector: row => row.origin + '-' + row.destination || '', sortable: true, wrap: true},
         {name: <div>Supplier</div>, selector: row => row.supplier || '', sortable: true, wrap: true},
         {name: <div>Payment <br/>Method</div>, selector: row => row.payment_type || '', sortable: true, wrap: true},
@@ -284,6 +338,20 @@ function SearchBookings() {
     const handlePerRowsChange = (newPerPage, page) => {
         setRowsPerPage(newPerPage);
         setCurrentPage(page);
+    };
+    const handleDateChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'fromDate') {
+            setFromDate(value);
+        } else if (name === 'toDate') {
+            setToDate(value);
+        }
+        // Check if 'From' date is greater than 'To' date
+        if (fromDate && toDate && new Date(fromDate) > new Date(toDate)) {
+            setDateError("'From' date cannot be greater than 'To' date.");
+        } else {
+            setDateError(''); // Clear error if dates are valid
+        }
     };
 
     const exportToExcel = (columns, data, fileName = "data.xlsx") => {
@@ -348,37 +416,61 @@ function SearchBookings() {
                             </div>
                         ) : (
                             <>
+                                <div className="row">
+                                    <div className="col-md-3 mb-3">
+                                        <label>Filter By:</label>
+                                        <select
+                                            className="form-control"
+                                            value={filterBy}
+                                            style={{width: '200px', height: '40px',cursor: 'pointer'}}
+                                            onChange={(e) => setFilterBy(e.target.value)}
+                                        >
+                                            <option value="bookingDate">Booking Date</option>
+                                            <option value="travelDate">Travel Date</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-md-3 mb-3">
+                                        <label>From:</label>
+                                        <input
+                                            type="date"
+                                            name="fromDate"
+                                            className="form-control"
+                                            value={fromDate}
+                                            max={toDate}
+                                            onChange={handleDateChange}
+                                            style={{width: '200px', height: '40px'}}
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mb-3">
+                                        <label>To:</label>
+                                        <input
+                                            type="date"
+                                            name="toDate"
+                                            className="form-control"
+                                            value={toDate}
+                                            min={fromDate}
+                                            onChange={handleDateChange}
+                                            style={{width: '200px', height: '40px'}}
+                                        />
+                                    </div>
+                                    {dateError && <div className="text-danger mb-3">{dateError}</div>}
+                                    <div className="col-md-3">
+                                        <button onClick={() => exportToExcel(columns, filteredLogs, 'data.xlsx')}
+                                                className="btn-sm btn btn-primary offset-5">Export to Excel
+                                        </button>
+                                    </div>
+                                </div>
+                           <br/>
+
                                 <div className="mb-4">
-                                    <div className="row justify-content-center">
-                                        <div className="col-lg-4 d-flex flex-column align-items-start">
-                                            <label htmlFor="searchBookingId" className="form-label">Filter by Booking
-                                                ID</label>
-                                            <input
-                                                type="text"
-                                                id="searchBookingId"
-                                                placeholder="Enter Booking ID"
-                                                className="form-control"
-                                                value={searchBookingId}
-                                                onChange={(e) => setSearchBookingId(e.target.value)}
-                                                style={{width: '200px', height: '40px'}}
-                                            />
-                                        </div>
-
-                                        <div className="col-lg-4 d-flex flex-column align-items-start">
-                                            <label htmlFor="searchPNR" className="form-label">Filter by PNR</label>
-                                            <input
-                                                type="text"
-                                                id="searchPNR"
-                                                placeholder="Enter PNR"
-                                                className="form-control"
-                                                value={searchPNR}
-                                                onChange={(e) => setSearchPNR(e.target.value)}
-                                                style={{width: '200px', height: '40px'}}
-                                            />
-                                        </div>
-
-                                        <div className="col-lg-4 d-flex flex-column align-items-start">
-                                            <label htmlFor="searchTerm" className="form-label">General Search</label>
+                                    <div className="row">
+                                        <div className=" mb-3 offset-lg-9">
+                                            <label
+                                                htmlFor="searchTerm"
+                                                style={{marginRight: '10px'}}
+                                            >
+                                                Smart Search
+                                            </label>
                                             <input
                                                 type="text"
                                                 id="searchTerm"
@@ -386,14 +478,12 @@ function SearchBookings() {
                                                 className="form-control"
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                style={{width: '250px', height: '40px'}}
+                                                style={{width: '230px', height: '40px'}}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mb-2"><button onClick={() => exportToExcel(columns,filteredLogs,'data.xlsx')} className="btn-sm btn btn-primary offset-10">Export to Excel</button></div>
-<br/>
-<br/>
+                                <br/>
                                 <DataTable
                                     columns={columns}
                                     data={currentData}
