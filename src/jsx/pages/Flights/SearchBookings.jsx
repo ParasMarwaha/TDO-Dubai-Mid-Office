@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {Logout} from "../../../store/actions/AuthActions.js";
 import button from "../../components/bootstrap/Button.jsx";
 import * as XLSX from "xlsx";
+import {parseJSON} from "date-fns";
 
 
 function SearchBookings() {
@@ -54,7 +55,6 @@ function SearchBookings() {
                 return onLogout();
             }
             if (result.responseCode === 2) {
-                console.log(result.data)
                 setLogs(result.data);
                 if (result.data.length > 0) {
                     const firstBooking = result.data[result.data.length - 1];
@@ -68,9 +68,9 @@ function SearchBookings() {
                     if (!isNaN(firstBookingDate) && !isNaN(lastBookingDate)) {
                         setFromDate(firstBookingDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
                         setToDate(lastBookingDate.toISOString().split('T')[0]);
-                        console.log(fromDate);
+                        //console.log(fromDate);
                     } else {
-                        console.error("Invalid date format in transactions.");
+                        //console.error("Invalid date format in transactions.");
                     }
                 }
             } else {
@@ -154,17 +154,14 @@ function SearchBookings() {
                 (log.booking_id || '').toString().toLowerCase().includes(search) ||
                 (log.gdspnr || '').toString().toLowerCase().includes(search) ||
                 (log.trip_type || '').toString().toLowerCase().includes(search) ||
-                (log.agent_email || '').toString().toLowerCase().includes(search) ||
                 (log.payment_status || '').toString().toLowerCase().includes(search) ||
                 (log.ticket_status || '').toString().toLowerCase().includes(search) ||
-                ((log.origin || '') + '-' + (log.destination || '')).toLowerCase().includes(search) ||
                 (log.supplier || '').toString().toLowerCase().includes(search) ||
                 (log.payment_type || '').toString().toLowerCase().includes(search) ||
                 (log.agent_amount || '').toString().toLowerCase().includes(search) ||
                 (log.customer_amount || '').toString().toLowerCase().includes(search) ||
                 (log.platform_fee || '').toString().toLowerCase().includes(search) ||
                 (log.platform_tax || '').toString().toLowerCase().includes(search) ||
-                (log.gateway_charges || '').toString().toLowerCase().includes(search) ||
                 (new Date(log.booking_date_time).toLocaleDateString('en-GB').toLowerCase().includes(search)) ||
                 (new Date(log.departure).toLocaleDateString('en-GB').toLowerCase().includes(search))
             )
@@ -205,47 +202,9 @@ function SearchBookings() {
             wrap: true,
             minWidth: '100px',
         },
-        {name: <div> Sr.<br/>No.</div>, selector: (row,index) => index +1 || '', sortable: true, wrap: true},
-        {name: <div> TDO <br/>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
-        {name: <div>Agent <br/>Name</div>, selector: row => row.agent_name || '', sortable: true, wrap: true},
-        {
-            name: <div>Booking <br />Date</div>,
-            selector: row => {
-                if (row.booking_date_time) {
-                    const dateObj = new Date(row.booking_date_time); // Convert to Date object
-                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    const month = monthNames[dateObj.getMonth()]; // Get month name
-                    const day = dateObj.getDate(); // Get day of the month
-                    const year = dateObj.getFullYear(); // Get year
-                    return `${day} ${month} ${year}`; // Return formatted date
-                }
-                return ''; // Fallback for empty date
-            },
-            sortable: true,
-            wrap: true,
-            minWidth: '120px'
-        },
-        {
-            name: <div>PNR</div>,
-            selector: row => {
-                if (row.gdspnr === "Not Processed") {
-                    return ''; // Leave empty if "Not Processed"
-                }
-                return row.gdspnr || ''; // Return the gdspnr value or empty string if undefined
-            },
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: <div>Booked <br/>By</div>,
-            selector: row =>
-                `${row.SubFirstName || ''} ${row.SubLastName || ''}`.trim(),
-            sortable: true,
-            wrap: true,
-            minWidth: '70px'
-        },
-        {name: <div>Location</div>, selector: row => row.SubLocation || '', sortable: true, wrap: true,minWidth:'80px'},
-        // {name: <div>Agent <br/>Email</div>, selector: row => row.agent_email || '', sortable: true, wrap: true,minWidth:'250px'},
+        // {name: <div> Sr.<br/>No.</div>, selector: (row,index) => index +1 || '', sortable: true, wrap: true},
+        {name: <div>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
+        {name: <div>Agent <br/>Company</div>, selector: row => row.agent_name || '', sortable: true, wrap: true},
         {name: <div>Payment <br/>Status</div>, selector: row => row.payment_status || '', sortable: true, wrap: true},
         {
             name: <div>Booking <br />Status</div>,
@@ -300,7 +259,48 @@ function SearchBookings() {
             }
         },
         {
-            name: <div>Travel <br />Date</div>,
+            name: <div>Booking <br />On</div>,
+            selector: row => {
+                if (row.booking_date_time) {
+                    const dateObj = new Date(row.booking_date_time); // Convert to Date object
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const month = monthNames[dateObj.getMonth()]; // Get month name
+                    const day = dateObj.getDate(); // Get day of the month
+                    const year = dateObj.getFullYear(); // Get year
+                    return `${day} ${month} ${year}`; // Return formatted date
+                }
+                return ''; // Fallback for empty date
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        {
+            name: <div>Primary Pax <br />Name</div>,
+            cell: (row) => {
+                // Parse the JSON only if necessary
+                let passenger = JSON.parse(row.booking_response_json)?.Passengers?.[0];
+                return `${passenger?.FirstName} ${passenger?.LastName}` || "N/A"; // Return 'N/A' if FirstName is undefined
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        {
+            name: <div>PNR</div>,
+            selector: row => {
+                if (row.gdspnr === "Not Processed") {
+                    return ''; // Leave empty if "Not Processed"
+                }
+                return row.gdspnr || ''; // Return the gdspnr value or empty string if undefined
+            },
+            sortable: true,
+            wrap: true
+        },
+        {name: <div>Invoice <br/>No.<br/></div>, selector: row => row.invoive_no || '', sortable: true, wrap: true},
+        {name: <div>Supplier<br/></div>, selector: row => row.supplier || '', sortable: true, wrap: true},
+        {
+            name: <div>Departure <br />Date</div>,
             selector: row => {
                 if (row.departure) {
                     const dateObj = new Date(row.departure); // Convert to Date object
@@ -316,14 +316,75 @@ function SearchBookings() {
             wrap: true,
             minWidth: '120px'
         },
-        {name: <div>Sectors</div>, selector: row => row.origin + '-' + row.destination || '', sortable: true, wrap: true},
+        {
+            name: <div>Arrival <br />Date</div>,
+            selector: row => {
+                if (row.departure) {
+                    const dateObj = new Date(row.arrival); // Convert to Date object
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const month = monthNames[dateObj.getMonth()]; // Get month name
+                    const day = dateObj.getDate(); // Get day of the month
+                    const year = dateObj.getFullYear(); // Get year
+                    return `${day} ${month} ${year}`; // Return formatted date
+                }
+                return ''; // Fallback for empty date
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        // {name: <div>Sectors</div>, selector: row => row.origin + '-' + row.destination || '', sortable: true, wrap: true},
         {name: <div>Supplier</div>, selector: row => row.supplier || '', sortable: true, wrap: true},
         {name: <div>Payment <br/>Method</div>, selector: row => row.payment_type || '', sortable: true, wrap: true},
-        {name: <div>Agent <br/>Amount <br/>(AED)</div>, selector: row => row.agent_amount || '', sortable: true, wrap: true},
-        {name: <div>Customer <br/>Amount<br/>(AED)</div>, selector: row => row.customer_amount || '', sortable: true, wrap: true},
+        {
+            name: <div>Published<br />Amount <br/>(AED)</div>,
+            cell: (row) => {
+                // Parse the JSON only if necessary
+                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
+                return `${flight?.GrossFare}` || "N/A"; // Return 'N/A' if FirstName is undefined
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        {
+            name: <div>Total<br />Base <br/>Fare(AED)</div>,
+            cell: (row) => {
+                // Parse the JSON only if necessary
+                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
+                return `${flight?.BasicFare}` || "N/A"; // Return 'N/A' if FirstName is undefined
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        {
+            name: <div>Total<br />Tax</div>,
+            cell: (row) => {
+                // Parse the JSON only if necessary
+                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
+                return `${flight?.TotalTax}` || "N/A"; // Return 'N/A' if FirstName is undefined
+            },
+            sortable: true,
+            wrap: true,
+            minWidth: '120px'
+        },
+        {name: <div>Total <br/>No. of <br/>Pax</div>, selector: row => row.total_no_of_pax || '', sortable: true, wrap: true},
+        {name: <div>Total <br/>Adult</div>, selector: row => row.total_adult || 0, sortable: true, wrap: true},
+        {name: <div>Total <br/>Child <br/></div>, selector: row => row.total_child || 0, sortable: true, wrap: true},
+        {name: <div>Total <br/>Infant <br/></div>, selector: row => row.total_infant || 0, sortable: true, wrap: true},
+        {name: <div>Trip <br/>Type <br/></div>, selector: row => row.trip_type || '', sortable: true, wrap: true, width: '110px'},
+        {name: <div>Admin <br/>Markup <br/>(AED)</div>, selector: row => row.admin_markup || 0, sortable: true, wrap: true},
         {name: <div>Platform <br/>Fee<br/>(AED)</div>, selector: row => row.platform_fee || '', sortable: true, wrap: true},
         {name: <div>Platform <br/>Tax<br/>(AED)</div>, selector: row => row.platform_tax || '', sortable: true, wrap: true},
-        {name: <div>Gateway <br/>Charges<br/>(AED)</div>, selector: row => row.gateway_charges || '', sortable: true, wrap: true},
+        {
+            name: <div>Sub <br/>User</div>,
+            selector: row =>
+                `${row.SubFirstName || ''} ${row.SubLastName || ''}`.trim(),
+            sortable: true,
+            wrap: true,
+            minWidth: '70px'
+        },
     ];
 
     const currentData = filteredLogs.slice(

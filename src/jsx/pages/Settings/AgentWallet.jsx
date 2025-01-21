@@ -267,7 +267,7 @@ function SearchAgency() {
     };
 
     useEffect(() => {
-        GetPartners();
+        GetPartners().then();
     }, [currentPage]);
 
     // Helper function to convert 'DD-MM-YYYY HH:MM:SS' to 'YYYY-MM-DD' format
