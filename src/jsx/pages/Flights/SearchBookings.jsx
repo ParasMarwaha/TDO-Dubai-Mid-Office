@@ -55,6 +55,7 @@ function SearchBookings() {
                 return onLogout();
             }
             if (result.responseCode === 2) {
+                console.log(result.data)
                 setLogs(result.data);
                 if (result.data.length > 0) {
                     const firstBooking = result.data[result.data.length - 1];
@@ -278,9 +279,11 @@ function SearchBookings() {
         {
             name: <div>Primary Pax <br />Name</div>,
             cell: (row) => {
-                // Parse the JSON only if necessary
-                let passenger = JSON.parse(row.booking_response_json)?.Passengers?.[0];
-                return `${passenger?.FirstName} ${passenger?.LastName}` || "N/A"; // Return 'N/A' if FirstName is undefined
+                // Parse the JSON safely
+                let passenger = JSON.parse(row.booking_response_json || "{}")?.Passengers?.[0];
+
+                // Check if passenger exists and return the name or 'N/A'
+                return passenger ? `${passenger.FirstName || "N/A"} ${passenger.LastName || "N/A"}` : "N/A";
             },
             sortable: true,
             wrap: true,
@@ -339,9 +342,9 @@ function SearchBookings() {
         {
             name: <div>Published<br />Amount <br/>(AED)</div>,
             cell: (row) => {
-                // Parse the JSON only if necessary
-                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
-                return `${flight?.GrossFare}` || "N/A"; // Return 'N/A' if FirstName is undefined
+                // Safely parse JSON and handle undefined
+                let flight = JSON.parse(row.booking_response_json || "{}")?.Flights?.[0];
+                return flight && flight.GrossFare !== undefined ? flight.GrossFare : "N/A";
             },
             sortable: true,
             wrap: true,
@@ -350,9 +353,9 @@ function SearchBookings() {
         {
             name: <div>Total<br />Base <br/>Fare(AED)</div>,
             cell: (row) => {
-                // Parse the JSON only if necessary
-                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
-                return `${flight?.BasicFare}` || "N/A"; // Return 'N/A' if FirstName is undefined
+                // Safely parse JSON and handle undefined
+                let flight = JSON.parse(row.booking_response_json || "{}")?.Flights?.[0];
+                return flight && flight.BasicFare !== undefined ? flight.BasicFare : "N/A";
             },
             sortable: true,
             wrap: true,
@@ -361,9 +364,9 @@ function SearchBookings() {
         {
             name: <div>Total<br />Tax</div>,
             cell: (row) => {
-                // Parse the JSON only if necessary
-                let flight = JSON.parse(row.booking_response_json)?.Flights?.[0];
-                return `${flight?.TotalTax}` || "N/A"; // Return 'N/A' if FirstName is undefined
+                // Safely parse JSON and handle undefined
+                let flight = JSON.parse(row.booking_response_json || "{}")?.Flights?.[0];
+                return flight && flight.TotalTax !== undefined ? flight.TotalTax : "N/A";
             },
             sortable: true,
             wrap: true,
@@ -464,106 +467,106 @@ function SearchBookings() {
         <div>
             <PageTitle motherMenu="Flights" activeMenu="/search-booked-flights" pageContent="Search Bookings"/>
 
-            <div className="card mb-4">
-                <div className="card-body">
-                    <div className="table-responsive px-3">
-                        <h2 className="text-center"><b> Search Bookings</b></h2>
-                        <hr/>
-                        {loading ? (
-                            <div className="text-center">
-                                <div className="spinner-border" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="row">
-                                    <div className="col-md-3 mb-3">
-                                        <label>Filter By:</label>
-                                        <select
-                                            className="form-control"
-                                            value={filterBy}
-                                            style={{width: '200px', height: '40px',cursor: 'pointer'}}
-                                            onChange={(e) => setFilterBy(e.target.value)}
-                                        >
-                                            <option value="bookingDate">Booking Date</option>
-                                            <option value="travelDate">Travel Date</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-md-3 mb-3">
-                                        <label>From:</label>
-                                        <input
-                                            type="date"
-                                            name="fromDate"
-                                            className="form-control"
-                                            value={fromDate}
-                                            max={toDate}
-                                            onChange={handleDateChange}
-                                            style={{width: '200px', height: '40px'}}
-                                        />
-                                    </div>
-                                    <div className="col-md-3 mb-3">
-                                        <label>To:</label>
-                                        <input
-                                            type="date"
-                                            name="toDate"
-                                            className="form-control"
-                                            value={toDate}
-                                            min={fromDate}
-                                            onChange={handleDateChange}
-                                            style={{width: '200px', height: '40px'}}
-                                        />
-                                    </div>
-                                    {dateError && <div className="text-danger mb-3">{dateError}</div>}
-                                    <div className="col-md-3">
-                                        <button onClick={() => exportToExcel(columns, filteredLogs, 'data.xlsx')}
-                                                className="btn-sm btn btn-primary offset-5">Export to Excel
-                                        </button>
+                <div className="card mb-4 fixed">
+                    <div className="card-body">
+                        <div className="table-responsive px-3">
+                            <h2 className="text-center"><b> Search Bookings</b></h2>
+                            <hr/>
+                            {loading ? (
+                                <div className="text-center">
+                                    <div className="spinner-border" role="status">
+                                        <span className="sr-only">Loading...</span>
                                     </div>
                                 </div>
-                           <br/>
-
-                                <div className="mb-4">
+                            ) : (
+                                <>
                                     <div className="row">
-                                        <div className=" mb-3 offset-lg-9">
-                                            <label
-                                                htmlFor="searchTerm"
-                                                style={{marginRight: '10px'}}
-                                            >
-                                                Smart Search
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="searchTerm"
-                                                placeholder="Search..."
+                                        <div className="col-md-3 mb-3">
+                                            <label>Filter By:</label>
+                                            <select
                                                 className="form-control"
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                                style={{width: '230px', height: '40px'}}
+                                                value={filterBy}
+                                                style={{width: '200px', height: '40px', cursor: 'pointer'}}
+                                                onChange={(e) => setFilterBy(e.target.value)}
+                                            >
+                                                <option value="bookingDate">Booking Date</option>
+                                                <option value="travelDate">Travel Date</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-3 mb-3">
+                                            <label>From:</label>
+                                            <input
+                                                type="date"
+                                                name="fromDate"
+                                                className="form-control"
+                                                value={fromDate}
+                                                max={toDate}
+                                                onChange={handleDateChange}
+                                                style={{width: '200px', height: '40px'}}
                                             />
                                         </div>
+                                        <div className="col-md-3 mb-3">
+                                            <label>To:</label>
+                                            <input
+                                                type="date"
+                                                name="toDate"
+                                                className="form-control"
+                                                value={toDate}
+                                                min={fromDate}
+                                                onChange={handleDateChange}
+                                                style={{width: '200px', height: '40px'}}
+                                            />
+                                        </div>
+                                        {dateError && <div className="text-danger mb-3">{dateError}</div>}
+                                        <div className="col-md-3">
+                                            <button onClick={() => exportToExcel(columns, filteredLogs, 'data.xlsx')}
+                                                    className="btn-sm btn btn-primary offset-5">Export to Excel
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <br/>
-                                <DataTable
-                                    columns={columns}
-                                    data={currentData}
-                                    pagination
-                                    paginationServer
-                                    paginationPerPage={rowsPerPage}
-                                    paginationTotalRows={filteredLogs.length}
-                                    onChangePage={handlePageChange}
-                                    onChangeRowsPerPage={handlePerRowsChange}
-                                    highlightOnHover
-                                    dense
-                                    striped
-                                />
-                            </>
-                        )}
+                                    <br/>
+
+                                    <div className="mb-4">
+                                        <div className="row">
+                                            <div className=" mb-3 offset-lg-9">
+                                                <label
+                                                    htmlFor="searchTerm"
+                                                    style={{marginRight: '10px'}}
+                                                >
+                                                    Smart Search
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="searchTerm"
+                                                    placeholder="Search..."
+                                                    className="form-control"
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    style={{width: '230px', height: '40px'}}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <DataTable
+                                        columns={columns}
+                                        data={currentData}
+                                        pagination
+                                        paginationServer
+                                        paginationPerPage={rowsPerPage}
+                                        paginationTotalRows={filteredLogs.length}
+                                        onChangePage={handlePageChange}
+                                        onChangeRowsPerPage={handlePerRowsChange}
+                                        highlightOnHover
+                                        dense
+                                        striped
+                                    />
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
 
