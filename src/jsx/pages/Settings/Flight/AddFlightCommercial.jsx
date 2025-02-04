@@ -1,6 +1,6 @@
 import Select from "react-select";
 import {Controller, useForm} from "react-hook-form";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {CCard, CCardHeader, CCardBody} from "@coreui/react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -177,7 +177,7 @@ const AddFlightCommercial = () => {
 
         if (!product) {
             setProduct(null);
-            errorToast('Please Select Product.');
+            Swal.fire({ icon: 'error', title: 'Please Select Product' });
             return false;
         }
 

@@ -1,6 +1,6 @@
 import Select from "react-select";
 import {Controller, useForm} from "react-hook-form";
-import React, {useEffect, useState} from "react";
+import  {useEffect, useState} from "react";
 import {CCard, CCardHeader, CCardBody} from "@coreui/react";
 import {useNavigate,useLocation} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -34,6 +34,8 @@ const EditFlightCommercial = () => {
     const [fareTypes, setFareTypes] = useState([]);
     const [carriers, setCarriers] = useState([]);
     const [submitting, setSubmitting] = useState(false);
+    const [groupType, setGroupType] = useState([]);
+
 
     async function fetchData() {
         try {
@@ -80,7 +82,27 @@ const EditFlightCommercial = () => {
                 Swal.fire({ icon: 'error', title: carriersData.message });
             }
 
-        } catch (e) {
+            // Fetch Group Type
+            const groupTypeApi = `${Server_URL}admin/user-group`;
+            let res = await fetch(groupTypeApi, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${dataLS.idToken}`
+                }
+            });
+            const groupTypeData = await res.json();
+            if(groupTypeData.message === 'Session Expired' || groupTypeData.message === 'Token Missing') {
+                return onLogout()
+            }
+            if (groupTypeData.responseCode === 2) {
+                console.log(groupTypeData.data)
+                setGroupType(groupTypeData.data);
+            } else {
+                Swal.fire({ icon: 'error', title: groupTypeData.message });
+            }
+
+        }
+        catch (e) {
             Swal.fire({
                 icon: "error",
                 title: "An error occurred",
@@ -103,10 +125,10 @@ const EditFlightCommercial = () => {
         dispatch(Logout(navigate));
     }
     async function showDataInForm(row) {
-        console.log(row);
+        console.log(row.group_type,row.group_name);
         const {
             id, product, vendor, booking_type, fare_type,
-            airline, carriers, fare, markup_type, markup_plb, markup_percentage, group_type
+            airline, carriers, fare, markup_type, markup_plb, markup_percentage, group_type,group_name
         } = row;
 
         // Set simple fields
@@ -375,18 +397,17 @@ const EditFlightCommercial = () => {
                                         required: "This is a required field.",
                                     })}
                             >
-                                <option value="">--Group Type--</option>
-                                <option value="0">Zero</option>
-                                {/*{groupTypes && groupTypes.map(x =>*/}
-                                {/*    <option key={x.GroupID} value={x.GroupID}>{x.GroupName}: {x.Description}</option>*/}
-                                {/*)}*/}
+                                {groupType && groupType.map(x =>
+                                    <option key={x.id} value={x.id}>{x.name}</option>
+                                )}
                             </select>
 
                             {errors?.group_type && <p className='text-danger'>{errors?.group_type?.message}</p>}
                         </div>
 
                         <div className="col-12">
-                            <button className="btn btn-primary px-5" disabled={submitting}>{submitting ? 'Editing...' : 'Edit'}</button>
+                            <button className="btn btn-primary px-5"
+                                    disabled={submitting}>{submitting ? 'Editing...' : 'Edit'}</button>
                         </div>
                     </div>
                 </form>
