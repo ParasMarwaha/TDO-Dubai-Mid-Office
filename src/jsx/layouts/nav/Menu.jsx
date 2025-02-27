@@ -348,6 +348,11 @@ export const MenuList = [
                 title: 'Fare',
                 to: 'fare-type',
             },
+            {
+                // Fare Type
+                title: 'Airport',
+                to: 'airport',
+            },
         ],
     },
 ]
