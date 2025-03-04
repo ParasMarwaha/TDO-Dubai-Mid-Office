@@ -174,6 +174,7 @@ import SearchBookings from "./pages/Flights/SearchBookings.jsx";
 import SearchBookingDetails from "./pages/Flights/SearchBookingDetails.jsx";
 import PrintTicket from "./pages/Flights/PrintTicket.jsx";
 import Airport from "./pages/Settings/Airport.jsx";
+import Airline from "./pages/Settings/Airline.jsx";
 
 const Markup = () => {
     const allroutes = [
@@ -233,6 +234,7 @@ const Markup = () => {
         {url: "agent-wallet", component: <AgentWallet/>},
         {url: "pending-requests", component: <PendingRequest/>},
         {url: "airport", component: <Airport/>},
+        {url: "airline", component: <Airline/>},
 
 
 

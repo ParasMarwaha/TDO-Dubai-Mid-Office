@@ -241,9 +241,7 @@ function CreateUser() {
                                                 className="form-control"
                                                 id="mobile"
                                                 {...register("mobile")}
-                                                pattern="[0-9]{12}"
                                                 maxLength="12"
-                                                title="Mobile number must be exactly 10 digits"
                                             />
                                             <ErrorMessage errors={errors} name='mobile'
                                                           render={({message}) => <p className="text-danger">{message}</p>}

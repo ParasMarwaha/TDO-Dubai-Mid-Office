@@ -184,25 +184,6 @@ function SearchBookings() {
                 </Link>
             )
         },
-        {
-            name: 'Action',
-            selector: row => {
-                if (row.ticket_status === "Failed") {
-                    return (
-                        <button
-                            type="button" className="btn btn-sm btn-primary p-1" style={{background:"yellowgreen"}}
-                            onClick={() => handleAbort(row)}
-                        >
-                            Abort
-                        </button>
-                    );
-                }
-                return ''; // Fallback for rows without "Failed" status
-            },
-            sortable: true,
-            wrap: true,
-            minWidth: '100px',
-        },
         // {name: <div> Sr.<br/>No.</div>, selector: (row,index) => index +1 || '', sortable: true, wrap: true},
         {name: <div>Booking <br/>ID</div>, selector: row => row.booking_id || '', sortable: true, wrap: true},
         {name: <div>Agent <br/>Company</div>, selector: row => row.agent_name || '', sortable: true, wrap: true},
