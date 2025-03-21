@@ -192,96 +192,96 @@ const Home = () => {
                 </div>
 
 
-                <div className="col-xl-12">
-                    <div className="row">
-                        <div className="col-xl-6">
-                            <BestSellingTab/>
-                        </div>
-                        <div className="col-xl-6">
-                            <div className="card bg-primary">
-                                <div className="card-body">
-                                    <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
-                                        <div className="me-auto pe-3 mb-3 mb-sm-0">
-                                            <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Ticket Sold Today</span>
-                                            <h2 className="chart-num-2 text-white mb-0">143,069<span
-                                                className="fs-18 me-2 ms-3">pcs</span></h2>
-                                        </div>
-                                        <div className="d-flex flex-wrap mb-3 mb-sm-0">
-                                            <svg width="87" height="58" viewBox="0 0 87 58" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M18.4571 37.6458C11.9375 44.6715 4.81049 52.3964 2 55.7162H68.8125C77.6491 55.7162 84.8125 48.5528 84.8125 39.7162V2L61.531 31.9333C56.8486 37.9536 48.5677 39.832 41.746 36.4211L37.3481 34.2222C30.9901 31.0432 23.2924 32.4352 18.4571 37.6458Z"
-                                                    fill="url(#paint0_linear)"/>
-                                                <path
-                                                    d="M2 55.7162C4.81049 52.3964 11.9375 44.6715 18.4571 37.6458C23.2924 32.4352 30.9901 31.0432 37.3481 34.2222L41.746 36.4211C48.5677 39.832 56.8486 37.9536 61.531 31.9333L84.8125 2"
-                                                    stroke="white" strokeWidth="4" strokeLinecap="round"/>
-                                                <defs>
-                                                    <linearGradient id="paint0_linear" x1="43.4062" y1="8.71453"
-                                                                    x2="46.7635" y2="55.7162"
-                                                                    gradientUnits="userSpaceOnUse">
-                                                        <stop stopColor="white" offset="0"/>
-                                                        <stop offset="1" stopColor="white" stopOpacity="0"/>
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                            <div className="ms-3">
-                                                <p className="fs-20 mb-0 font-w500 text-white">+4%</p>
-                                                <span className="fs-12 text-white">than last day</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="progress style-1" style={{height: "15px"}}>
-                                        <div className="progress-bar bg-white progress-animated"
-                                             style={{width: "55%", height: "15px"}} role="progressbar">
-                                            <span className="sr-only">55% Complete</span>
-                                            <span className="bg-white arrow"></span>
-                                            <span className="font-w600 counter-bx text-black"><strong
-                                                className="counter font-w400">985pcs Left</strong></span>
-                                        </div>
-                                    </div>
-                                    <p className="fs-12 text-white pt-4">Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad mini</p>
-                                    <Link to={"#"} className="text-white">View Detail<i
-                                        className="las la-long-arrow-alt-right scale5 ms-3"></i></Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className="col-xl-12">*/}
+                {/*    <div className="row">*/}
+                {/*        <div className="col-xl-6">*/}
+                {/*            <BestSellingTab/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-6">*/}
+                {/*            <div className="card bg-primary">*/}
+                {/*                <div className="card-body">*/}
+                {/*                    <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">*/}
+                {/*                        <div className="me-auto pe-3 mb-3 mb-sm-0">*/}
+                {/*                            <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Ticket Sold Today</span>*/}
+                {/*                            <h2 className="chart-num-2 text-white mb-0">143,069<span*/}
+                {/*                                className="fs-18 me-2 ms-3">pcs</span></h2>*/}
+                {/*                        </div>*/}
+                {/*                        <div className="d-flex flex-wrap mb-3 mb-sm-0">*/}
+                {/*                            <svg width="87" height="58" viewBox="0 0 87 58" fill="none"*/}
+                {/*                                 xmlns="http://www.w3.org/2000/svg">*/}
+                {/*                                <path*/}
+                {/*                                    d="M18.4571 37.6458C11.9375 44.6715 4.81049 52.3964 2 55.7162H68.8125C77.6491 55.7162 84.8125 48.5528 84.8125 39.7162V2L61.531 31.9333C56.8486 37.9536 48.5677 39.832 41.746 36.4211L37.3481 34.2222C30.9901 31.0432 23.2924 32.4352 18.4571 37.6458Z"*/}
+                {/*                                    fill="url(#paint0_linear)"/>*/}
+                {/*                                <path*/}
+                {/*                                    d="M2 55.7162C4.81049 52.3964 11.9375 44.6715 18.4571 37.6458C23.2924 32.4352 30.9901 31.0432 37.3481 34.2222L41.746 36.4211C48.5677 39.832 56.8486 37.9536 61.531 31.9333L84.8125 2"*/}
+                {/*                                    stroke="white" strokeWidth="4" strokeLinecap="round"/>*/}
+                {/*                                <defs>*/}
+                {/*                                    <linearGradient id="paint0_linear" x1="43.4062" y1="8.71453"*/}
+                {/*                                                    x2="46.7635" y2="55.7162"*/}
+                {/*                                                    gradientUnits="userSpaceOnUse">*/}
+                {/*                                        <stop stopColor="white" offset="0"/>*/}
+                {/*                                        <stop offset="1" stopColor="white" stopOpacity="0"/>*/}
+                {/*                                    </linearGradient>*/}
+                {/*                                </defs>*/}
+                {/*                            </svg>*/}
+                {/*                            <div className="ms-3">*/}
+                {/*                                <p className="fs-20 mb-0 font-w500 text-white">+4%</p>*/}
+                {/*                                <span className="fs-12 text-white">than last day</span>*/}
+                {/*                            </div>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+                {/*                    <div className="progress style-1" style={{height: "15px"}}>*/}
+                {/*                        <div className="progress-bar bg-white progress-animated"*/}
+                {/*                             style={{width: "55%", height: "15px"}} role="progressbar">*/}
+                {/*                            <span className="sr-only">55% Complete</span>*/}
+                {/*                            <span className="bg-white arrow"></span>*/}
+                {/*                            <span className="font-w600 counter-bx text-black"><strong*/}
+                {/*                                className="counter font-w400">985pcs Left</strong></span>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+                {/*                    <p className="fs-12 text-white pt-4">Lorem ipsum dolor sit amet, consectetur*/}
+                {/*                        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna*/}
+                {/*                        aliqua. Ut enim ad mini</p>*/}
+                {/*                    <Link to={"#"} className="text-white">View Detail<i*/}
+                {/*                        className="las la-long-arrow-alt-right scale5 ms-3"></i></Link>*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
-                <div className="col-xl-9 col-xxl-8">
-                    <div className="row">
-                        <div className="col-xl-12">
-                            <RecentEvenList/>
-                        </div>
-                        <div className="col-xl-6 col-xxl-12">
-                            <Latestsaleblog/>
-                        </div>
-                        <div className="col-xl-6 col-xxl-12">
-                            <SalesRevenueTab/>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xl-3 col-xxl-4">
-                    <div className="row">
-                        <div className="col-xl-12">
-                            <UpcomingEventSection/>
-                        </div>
-                        <div className="col-xl-12">
-                            <TicketsLineApex/>
-                        </div>
-                        <div className="col-xl-12">
-                            <RevenueLineApex/>
-                        </div>
-                        <div className="col-xl-12">
-                            <SalesCanvas/>
-                        </div>
-                        <div className="col-xl-12">
-                            <Donut/>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className="col-xl-9 col-xxl-8">*/}
+                {/*    <div className="row">*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <RecentEvenList/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-6 col-xxl-12">*/}
+                {/*            <Latestsaleblog/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-6 col-xxl-12">*/}
+                {/*            <SalesRevenueTab/>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className="col-xl-3 col-xxl-4">*/}
+                {/*    <div className="row">*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <UpcomingEventSection/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <TicketsLineApex/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <RevenueLineApex/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <SalesCanvas/>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-xl-12">*/}
+                {/*            <Donut/>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
         </>
     );

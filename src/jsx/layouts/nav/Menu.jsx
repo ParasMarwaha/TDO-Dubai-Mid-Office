@@ -10,6 +10,7 @@ import {IoAccessibilitySharp, IoSettingsSharp} from "react-icons/io5";
 //import {RiHotelFill} from "react-icons/ri";
 import {MdSpaceDashboard} from "react-icons/md";
 import {PiUserSwitchBold} from "react-icons/pi";
+import {RiHotelFill} from "react-icons/ri";
 
 export const MenuList = [
     // Dashboard
@@ -205,37 +206,37 @@ export const MenuList = [
         ],
     },
 
-    // Hotels
-    // {
-    //     title: 'Hotels',
-    //     classsChange: 'mm-collapse',
-    //     // iconStyle: <FaHotel/>,
-    //     iconStyle: <RiHotelFill/>,
-    //     content: [
-    //         {
-    //             title: 'Hotel Stats',
-    //             to: 'hotels-collection',
-    //         },
-    //         {
-    //             title: 'Search Booking',
-    //             to: 'hotels-bookings',
-    //         },
-    //         {
-    //             title: 'Hotel Markups',
-    //             hasMenu: true,
-    //             content: [
-    //                 {
-    //                     title: 'Manage Markups',
-    //                     to: 'manage-hotel-markups',
-    //                 },
-    //                 {
-    //                     title: 'Allot Markups',
-    //                     to: 'allot-hotel-markups',
-    //                 },
-    //             ],
-    //         },
-    //     ],
-    // },
+    //Hotels
+    {
+        title: 'Hotels',
+        classsChange: 'mm-collapse',
+        // iconStyle: <FaHotel/>,
+        iconStyle: <RiHotelFill/>,
+        content: [
+            // {
+            //     title: 'Hotel Stats',
+            //     to: 'hotels-collection',
+            // },
+            {
+                title: 'Search Booking',
+                to: 'hotels-bookings',
+            },
+            // {
+            //     title: 'Hotel Markups',
+            //     hasMenu: true,
+            //     content: [
+            //         {
+            //             title: 'Manage Markups',
+            //             to: 'manage-hotel-markups',
+            //         },
+            //         {
+            //             title: 'Allot Markups',
+            //             to: 'allot-hotel-markups',
+            //         },
+            //     ],
+            // },
+        ],
+    },
 
     // Fix Dept. Flights
     // {
