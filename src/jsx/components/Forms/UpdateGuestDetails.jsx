@@ -15,6 +15,7 @@ const UpdateGuestDetails = ({ selectedPax, fetchDetails, paxHandleClose }) => {
     } = useForm({
         defaultValues: {
             booking_id: selectedPax?.bookingDetailId || "",
+            bId: selectedPax?.bId || "",
             pt: selectedPax?.salutation || "",
             fN: selectedPax?.firstName || "",
             lN: selectedPax?.lastName || "",
@@ -57,25 +58,39 @@ const UpdateGuestDetails = ({ selectedPax, fetchDetails, paxHandleClose }) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
                         {/* Booking ID (Read Only) */}
-                        <div className="col-md-12 mb-3">
+                        <div className="col-md-6 mb-3">
+                            <label>Unique Id</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                readOnly
+                                style={{background: "lightgray"}}
+                                {...register("booking_id", {required: "This field is required."})}
+                            />
+                            <ErrorMessage errors={errors} name="booking_id"
+                                          render={({message}) => <p className="text-danger">{message}</p>}/>
+                        </div>
+
+                        <div className="col-md-6 mb-3">
                             <label>Booking Ref. Id</label>
                             <input
                                 type="text"
                                 className="form-control"
                                 readOnly
-                                style={{ background: "lightgray" }}
-                                {...register("booking_id", { required: "This field is required." })}
+                                style={{background: "lightgray"}}
+                                {...register("bId", {required: "This field is required."})}
                             />
-                            <ErrorMessage errors={errors} name="booking_id"
-                                          render={({ message }) => <p className="text-danger">{message}</p>} />
+                            <ErrorMessage errors={errors} name="bId"
+                                          render={({message}) => <p className="text-danger">{message}</p>}/>
                         </div>
+
 
                         {/* Salutation (Disabled if "Master") */}
                         <div className="col-md-4 mb-3">
                             <label>Salutation</label>
                             <select
                                 className="form-control"
-                                {...register("pt", { required: "This field is required." })}
+                                {...register("pt", {required: "This field is required."})}
                                 disabled={selectedPax?.salutation === "Master"}
                                 onChange={(e) => setValue("pt", e.target.value)}
                             >
@@ -85,7 +100,7 @@ const UpdateGuestDetails = ({ selectedPax, fetchDetails, paxHandleClose }) => {
                                 <option value="Master">Master</option>
                             </select>
                             <ErrorMessage errors={errors} name="pt"
-                                          render={({ message }) => <p className="text-danger">{message}</p>} />
+                                          render={({message}) => <p className="text-danger">{message}</p>}/>
                         </div>
 
                         {/* First Name */}
@@ -94,10 +109,10 @@ const UpdateGuestDetails = ({ selectedPax, fetchDetails, paxHandleClose }) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                {...register("fN", { required: "This field is required." })}
+                                {...register("fN", {required: "This field is required."})}
                             />
                             <ErrorMessage errors={errors} name="fN"
-                                          render={({ message }) => <p className="text-danger">{message}</p>} />
+                                          render={({message}) => <p className="text-danger">{message}</p>}/>
                         </div>
 
                         {/* Last Name */}
@@ -106,10 +121,10 @@ const UpdateGuestDetails = ({ selectedPax, fetchDetails, paxHandleClose }) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                {...register("lN", { required: "This field is required." })}
+                                {...register("lN", {required: "This field is required."})}
                             />
                             <ErrorMessage errors={errors} name="lN"
-                                          render={({ message }) => <p className="text-danger">{message}</p>} />
+                                          render={({message}) => <p className="text-danger">{message}</p>}/>
                         </div>
 
                         {/* Submit Button */}

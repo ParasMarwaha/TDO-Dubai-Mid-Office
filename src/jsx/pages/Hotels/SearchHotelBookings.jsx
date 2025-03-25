@@ -101,7 +101,7 @@ function SearchHotelBookings() {
         // Determine the date to filter by based on the filterBy value
         const logDate = filterBy === 'bookingDate'
             ? new Date(log.booking_DateTime) // Use booking date
-            : new Date(log.departure); // Use travel date (departure)
+            : new Date(log.checkIN); // Use travel date (departure)
 
 
         return (
